@@ -14,15 +14,13 @@ function M(x, x1, p=2, alpha=1)
 
 end
 
- 
-
 function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
 
     x = x0
 
     i = 0
 
-    while abs(x-f(x)) > epsilon
+    while abs(f(x)) > epsilon
 
         x = x - 1 / ((-p * (x-x1) / abs(x-x1)^(p+2)) * f(x) + M(x, x1) * ForwardDiff.derivative(f, x)) * M(x, x1) * f(x)
 
