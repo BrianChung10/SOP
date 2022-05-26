@@ -11,7 +11,7 @@ function M(x, x1, p=2, alpha=1)
     1 / abs(x-x1)^p + alpha
 end
 
-function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
+function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
     x = x0
     i = 0
     while abs(f(x)) > epsilon
@@ -25,16 +25,9 @@ function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
     x
 end
 
- 
 
-function test_deflated_newton(f, x0, x1)
-    deflated_newton(x0, x1, f)
-end
-
- 
-
-f(x) = x^2 - 1
+f(x) = (x-1) * (x+1)
+g(x) = (x-2) * (x+2) * (x+3)
 
 deflated_newton(-0.1, 1, f)
-
- 
+deflated_newton(0.1, 2, g)
