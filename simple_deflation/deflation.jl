@@ -1,8 +1,8 @@
 import Pkg
+Pkg.add("DataStructures")
 Pkg.add("ForwardDiff")
 Pkg.add("LinearAlgebra")
-using ForwardDiff
-using LinearAlgebra
+using ForwardDiff, LinearAlgebra, DataStructures
 import ForwardDiff: derivative, jacobian
 import LinearAlgebra: norm, inv
 
@@ -42,6 +42,7 @@ function deflated_newton_higher_dimension(x0, x1, f, max_iter=1000, epsilon=1e-1
     end
     x
 end
+
 
 f(x) = (x-1) * (x+1)
 g(x) = (x-2) * (x+2) * (x+3)
