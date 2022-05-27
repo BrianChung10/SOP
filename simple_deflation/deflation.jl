@@ -2,7 +2,7 @@ import Pkg
 Pkg.add("DataStructures")
 Pkg.add("ForwardDiff")
 Pkg.add("LinearAlgebra")
-using ForwardDiff, LinearAlgebra, DataStructures
+using ForwardDiff, LinearAlgebra, DataStructures, Random
 import ForwardDiff: derivative, jacobian
 import LinearAlgebra: norm, inv
 
@@ -13,35 +13,39 @@ function M(x, x1, p=2, alpha=1)
 end
 
 
-# Implement the deflated_newton in one dimension
-function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
+# Define the usual newton method
+function newton(f, x0, max_iter=1000, eps=1e-13)
     x = x0
     i = 0
-    while abs(f(x)) > epsilon
-        x = x - 1 / ((-p * (x-x1) / norm(x-x1)^(p+2)) * f(x) +
-            M(x, x1) * derivative(f, x)) * M(x, x1) * f(x)
+    while abs(f(x)) > eps
         if i > max_iter
             return "Cannot converge."
         end
-        i = i + 1
+        x = x - f(x) / derivative(f, x)
+        i += 1
     end
     x
 end
 
 
-# Implement the deflated_newton in higher dimension
-function deflated_newton_higher_dimension(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
-    x = x0
-    i = 0
-    while norm(f(x)) > epsilon
-        temp_func(y) = M(y, x1) * f(y)
-        x = x - inv(jacobian(temp_func, x)) * M(x, x1) * f(x)
-        if i > max_iter
-            return "Cannot converge"
-        end
-        i = i + 1
+# Define the deflated_newton in 1d
+function deflated_newton(x0, x1, f)
+    g = x -> f(x) * M(x, x1)
+    newton(g, x0)
+end
+
+
+# Solve for all roots by using deflated newton method
+function deflated_newton_solve_1d(f, x0)
+    x = newton(f, x0)
+    solution = [x]
+    while x != "Cannot converge"
+        f = y -> f(y) * M(y, x)
+        x0 = rand(-1000: 1000)
+        x = newton(f, x0)
+        push!(solution, x)
     end
-    x
+    solution
 end
 
 
@@ -50,9 +54,10 @@ f(x) = (x-1) * (x+1)
 g(x) = (x-2) * (x+2) * (x+3)
 h(x) = sin(x)
 f1(x) = (x .- [1, 1]) .* (x .- [2, 2])
-
+ 
 
 # Tests
-deflated_newton(-0.1, 1, f)
+deflated_newton(0, 1, f)
 deflated_newton(0.1, 2, g)
 deflated_newton(0.1, 0, h)
+deflated_newton_solve_1d(f, 0)
