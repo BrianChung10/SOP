@@ -2,7 +2,7 @@ import Pkg
 Pkg.add("DataStructures")
 Pkg.add("ForwardDiff")
 Pkg.add("LinearAlgebra")
-using ForwardDiff, LinearAlgebra, DataStructures, Random
+using ForwardDiff, LinearAlgebra, Random
 import ForwardDiff: derivative, jacobian
 import LinearAlgebra: norm, inv
 
@@ -35,6 +35,26 @@ function deflated_newton(x0, x1, f)
 end
 
 
+function newton_higher_dimension(f, x0, max_iter=1000, eps=1e-13)
+    x = x0
+    i = 0
+    while norm(f(x)) > eps
+        if i > max_iter
+            return "Cannot converge."
+        end
+        x = x - inv(jacobian(f, x)) * f(x)
+        i += 1
+    end
+    x
+end
+
+
+function deflated_newton_higher_dimension(x0, x1, f)
+    g = x -> f(x) * M(x, x1)
+    newton_higher_dimension(g, x0)
+end
+
+
 # Solve for all roots by using deflated newton method
 function deflated_newton_solve_1d(f, x0)
     x = newton(f, x0)
@@ -49,6 +69,7 @@ function deflated_newton_solve_1d(f, x0)
 end
 
 
+
 # Test functions
 f(x) = (x-1) * (x+1)
 g(x) = (x-2) * (x+2) * (x+3)
@@ -60,4 +81,5 @@ f1(x) = (x .- [1, 1]) .* (x .- [2, 2])
 deflated_newton(0, 1, f)
 deflated_newton(0.1, 2, g)
 deflated_newton(0.1, 0, h)
+deflated_newton_higher_dimension([0, 0], [1, 1], f1)
 deflated_newton_solve_1d(f, 0)
