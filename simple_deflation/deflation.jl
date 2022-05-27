@@ -29,6 +29,7 @@ function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
 end
 
 
+# Implement the deflated_newton in higher dimension
 function deflated_newton_higher_dimension(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
     x = x0
     i = 0
@@ -44,12 +45,14 @@ function deflated_newton_higher_dimension(x0, x1, f, max_iter=1000, epsilon=1e-1
 end
 
 
+# Test functions
 f(x) = (x-1) * (x+1)
 g(x) = (x-2) * (x+2) * (x+3)
 h(x) = sin(x)
 f1(x) = (x .- [1, 1]) .* (x .- [2, 2])
 
 
+# Tests
 deflated_newton(-0.1, 1, f)
 deflated_newton(0.1, 2, g)
 deflated_newton(0.1, 0, h)
