@@ -50,7 +50,7 @@ end
 
 
 function deflated_newton_higher_dimension(x0, x1, f)
-    g = x -> f(x) * M(x, x1)
+    g = x -> M(x, x1) * f(x) 
     newton_higher_dimension(g, x0)
 end
 
