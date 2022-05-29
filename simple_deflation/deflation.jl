@@ -4,7 +4,7 @@ Pkg.add("ForwardDiff")
 Pkg.add("LinearAlgebra")
 using ForwardDiff, LinearAlgebra, Random
 import ForwardDiff: derivative, jacobian
-import LinearAlgebra: norm, inv
+import LinearAlgebra: norm, inv, I
 
 
 # Define the shifted deflation operator
@@ -17,7 +17,7 @@ end
 function newton(f, x0, max_iter=1000, eps=1e-13)
     x = x0
     i = 0
-    while abs(f(x)) > eps
+    while norm(f(x)) > eps
         if i > max_iter
             return "Cannot converge."
         end
@@ -30,7 +30,7 @@ end
 
 # Define the deflated_newton in 1d
 function deflated_newton(x0, x1, f)
-    g = x -> f(x) * M(x, x1)
+    g = x -> M(x, x1) * f(x)
     newton(g, x0)
 end
 
