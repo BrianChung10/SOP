@@ -50,3 +50,17 @@ newton(cubic_parabola, x0)
 x0 = [-1; -1]
 x1 = newton(cubic_parabola, x0)
 x2 = deflated_newton(x0, x1, cubic_parabola)
+
+
+# Example 2: The Four-Cluster
+f(x, y) = (x - y^2) * (x - sin(y))
+g(x, y) = (cos(y) - x) * (y - cos(x))
+
+
+function four_cluster(x)
+    [f(x[1], x[2]); g(x[1], x[2])]
+end
+
+
+x0 = [0.9; 1]
+newton(four_cluster, x0)
