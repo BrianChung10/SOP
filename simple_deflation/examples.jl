@@ -47,9 +47,24 @@ end
 x0 = [0.5; 0.5]
 newton(cubic_parabola, x0)
 
-x0 = [-1; -1]
+x0 = [-1; -1] # Initial guess
 x1 = newton(cubic_parabola, x0)
 x2 = deflated_newton(x0, x1, cubic_parabola)
+
+
+struct DeflatedFunction{F}
+    x::Vector{Float64} # points
+    f::F # original function
+end
+
+function (D::DeflatedFunction)(x)
+    ret = D.f(x)
+    for x in D.x
+        # TODO: update ret
+    end
+    ret
+end
+
 
 
 # Example 2: The Four-Cluster
