@@ -1,7 +1,7 @@
 # Deflation Problem
 
 ## Stage 1: Roots finding
-1) Implement Newton in Julia
+1) Implement Newton in Julia using FowardDiff
 2) Implement simple deflation
 3) Use shifted deflation
 
@@ -10,4 +10,4 @@
 2) Add (shifted) deflation
 
 ## Stage 3: Nonlinear ODEs
-1) Idea: use finite difference of Poisson turn into nonlinear systems
+1) Idea: use finite difference of Poisson to turn into nonlinear systems
