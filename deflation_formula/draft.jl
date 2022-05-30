@@ -32,7 +32,7 @@ function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
 end
 
 # Implement the deflated_newton in higher dimension
-function deflated_newton_higher_dimension(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
+function deflated_newton_higher_dimension(x0, x1, f, max_iter=100, epsilon=1e-13, p=2)
     x = x0
     i = 0
     while norm(f(x)) > epsilon
@@ -43,7 +43,7 @@ function deflated_newton_higher_dimension(x0, x1, f, max_iter=1000, epsilon=1e-1
         dy = (1+inv(m)*m_de'*dx/(1-inv(m)*m_de'*dx))*dx
         x = x + dy
         if i > max_iter
-            return "Cannot converge"
+            return "Cannot converge."
         end
         i = i + 1
     end
@@ -58,13 +58,15 @@ function deflated_newton_solve_1d(x0, x1, f,max_iter= 1000)
     fs[1] = f
     fs[2] = x -> fs[1](x)*M(x,x1)
     k = 2
-        while x != "Cannot converge"
-            fs[k+1] = y -> fs[k](y)*M(y,x)
-            x = deflated_newton(x0, x, fs[k+1])
+    for k = 2:max_iter
+        x = deflated_newton(x0, x, fs[k])
+        fs[k+1] = y -> fs[k](y)*M(y,x)
+        if x == "Cannot converge."
+            return solution
+        else
             push!(solution, x)
-            k = k + 1
+        end
     end
-    solution
 end
 
 # Test functions
@@ -78,4 +80,4 @@ deflated_newton(-0.1, 1, f)
 deflated_newton(0.1, 2, g)
 deflated_newton(0.1, 0, h)
 deflated_newton_higher_dimension([0.1,0.1],[1, 1],f1)
-deflated_newton_solve_1d(0.1,2,g)
+deflated_newton_solve_1d(10,2,g)
