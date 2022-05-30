@@ -50,7 +50,7 @@ end
 
 
 function deflated_newton_higher_dimension(x0, x1, f)
-    g = x -> M(x, x1) * f(x) 
+    g = x -> M(x, x1) * f(x)
     newton_higher_dimension(g, x0)
 end
 
@@ -68,6 +68,30 @@ function deflated_newton_solve_1d(f, x0)
     solution
 end
 
+g(x) = (x-2) * (x+2) * (x+3)
+fs = Vector{Function}(undef, 1)
+fs[1] = f
+push!(fs, g)
+i(x) = last(fs)(x) * (x-1)
+i(5)
+
+
+function multroot(f, x0)
+    fs = Vector{Function}(undef, 1)
+    fs[1] = f
+    x1 = newton(f, x0)
+    sol = [x1]
+    xn = x1
+    while xn != "Cannot converge"
+        xn = last(sol)
+        g(x) = last(fs)(x) * M(x, xn)
+        push!(fs, g)
+        xnew = newton(g, x0)
+        push!(sol, xnew)
+    end
+    sol
+end
+
 
 
 # Test functions
@@ -75,7 +99,6 @@ f(x) = (x-1) * (x+1)
 g(x) = (x-2) * (x+2) * (x+3)
 h(x) = sin(x)
 f1(x) = (x .- [1, 1]) .* (x .- [2, 2])
- 
 
 # Tests
 deflated_newton(0, 1, f)
