@@ -10,7 +10,7 @@ lambda = 1
 
 
 # Implement the F[u] as defined in (3.7)
-function F(u)  # F takes a vector of lengh n+1 and returns a vector of length n+1
+function F(u) # F takes a vector of lengh n+1 and returns a vector of length n+1
     v = zeros(length(u))
     for k = 1: n-2
         v[k+1] = 1 / h^2 * (u[k] - 2u[k+1] + u[k+2]) + lambda*exp(u[k+1])
@@ -18,4 +18,7 @@ function F(u)  # F takes a vector of lengh n+1 and returns a vector of length n+
     v
 end
 
-jacobian(F, x)
+y = zeros(n+1)
+jacobian(F, y)
+
+F(y)
