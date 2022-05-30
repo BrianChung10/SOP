@@ -59,7 +59,7 @@ end
 function deflated_newton_solve_1d(f, x0)
     x = newton(f, x0)
     solution = [x]
-    while typeof(x) == Number
+    while x != "Cannot converge."
         f = y -> f(y) * M(y, x)
         x0 = rand(-1000: 1000)
         x = newton(f, x0)
@@ -67,6 +67,7 @@ function deflated_newton_solve_1d(f, x0)
     end
     solution
 end
+
 
 g(x) = (x-2) * (x+2) * (x+3)
 fs = Vector{Function}(undef, 1)
@@ -131,3 +132,5 @@ deflated_newton(0.1, 2, g)
 deflated_newton(0.1, 0, h)
 deflated_newton_higher_dimension([0, 0], [1, 1], f1)
 deflated_newton_solve_1d(f, 0)
+
+mult_root(f, 1.2, 10)

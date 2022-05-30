@@ -43,7 +43,7 @@ function deflated_newton_higher_dimension(x0, x1, f, max_iter=1000, epsilon=1e-1
         dy = (1+inv(m)*m_de'*dx/(1-inv(m)*m_de'*dx))*dx
         x = x + dy
         if i > max_iter
-            return "Cannot converge"
+            return "Cannot converge."
         end
         i = i + 1
     end
