@@ -77,6 +77,7 @@ i(x) = last(fs)(x) * (x-1)
 i(5)
 
 
+#Another function which finds all roots using deflated newton method
 function multroot(f, x0, n = 10)
     fs = Vector{Function}(undef, n)
     fs[1] = f
