@@ -18,15 +18,14 @@ function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
     x = x0
     i = 0
     while abs(f(x)) > epsilon
-        dx = - ((derivative(f, x))^(-1))*f(x)
-        m = M(x,x1)
-        m_de = (-p * (x-x1) / norm(x-x1)^(p+2))
-        dy = (1+m^(-1)*m_de*dx/(1-m^(-1)*m_de*dx))*dx
-        x = x + dy 
         if i > max_iter
             return "Cannot converge."
         end
-        i = i + 1
+        dx = - 1 / (derivative(f, x)) * f(x)
+        m = M(x, x1)
+        m_de = -p * (x-x1) / norm(x-x1) ^ (p+2)
+        dy = (1 + m^(-1) * m_de * dx / (1 - m^(-1) * m_de * dx))*dx
+        x = x + dy
     end
     x
 end

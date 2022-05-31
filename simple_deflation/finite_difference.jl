@@ -51,6 +51,7 @@ function deflated_newton(x0, x1, f)
 end
 
 
+# We obtain the solution of the ODE via (2.10)
 x0 = zeros(n+1)
 x1 = newton(F, x0)
 x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE when lambda = 1
