@@ -97,7 +97,7 @@ end
 multroot(g, 0)
 
 
-
+g(x) = (x-2) * (x+2) * (x+3)
 fs = Vector{Function}(undef, 10)
 fs[1] = g
 sol = [newton(g,0)]
