@@ -35,7 +35,7 @@ function M(x, x1, p=2, alpha=1)
 end
 
 
-function newton(f, x0, max_iter=1000, eps=1e-13)
+function newton(f, x0, max_iter=1000, eps=1e-10)
     x = x0
     i = 0
     while norm(f(x)) > eps
@@ -46,7 +46,7 @@ function newton(f, x0, max_iter=1000, eps=1e-13)
         # Have to make A invertible while preserving the boundary conditions
         A[1, 1] = 1
         A[end, end] = 1
-        x = x - inv(A) * f(x)
+        x = x - A \ f(x)
         i += 1
     end
     x
@@ -61,3 +61,4 @@ end
 
 x0 = zeros(n+1)
 x1 = newton(F, x0)
+x2 = deflated_newton(x0, x1, F)
