@@ -22,14 +22,6 @@ function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and ret
 end
 
 
-y = zeros(n+1)
-A = jacobian(F, y)
-
-
-# Make jacobian invertible while preserving the boundary conditions
-A[1, 1] = 1
-A[end, end] = 1
-
 function M(x, x1, p=2, alpha=1)
     I(n+1) / norm(x-x1)^p + alpha * I(n+1)
 end
@@ -61,4 +53,6 @@ end
 
 x0 = zeros(n+1)
 x1 = newton(F, x0)
-x2 = deflated_newton(x0, x1, F)
+x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE when lambda = 1
+
+

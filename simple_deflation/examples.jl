@@ -40,17 +40,15 @@ g1(x) = x^2
 plot(f1, -1.5, 1.5)
 plot!(g1, -1.5, 1.5)
 
-function cubic_parabola(x)
-    [f(x[1], x[2]); g(x[1], x[2])]
-end
 
-x0 = [0.5; 0.5]
-newton(cubic_parabola, x0)
-
-x0 = [-1; -1] # Initial guess
-x1 = newton(cubic_parabola, x0)
-x2 = deflated_newton(x0, x1, cubic_parabola)
-
+x0 = [0.5; 0.5] # Initial guess
+h1(x) = [f(x[1], x[2]); g(x[1], x[2])] # Original function (Cubic-Parabola)
+x1 = newton(h1, x0) # Find the first root
+h2(x) = M(x, x1) * h1(x) # Define the deflated function
+x2 = newton(h2, x0) # Find the second root with the same intial guess
+h3(x) = M(x, x2) * h2(x) # Define the second deflated function
+x3 = newton(h3, x0)
+sol = [x1, x2, x3]
 
 struct DeflatedFunction{F}
     x::Vector{Float64} # points
