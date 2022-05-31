@@ -69,7 +69,7 @@ function M2(x, x1, p=2, alpha=1)
 end
 
 # Implement the deflated_newton in higher dimension
-function deflated_newton_higher_dimension210(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
+function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
     x = x0
     i = 0
     while norm(f(x)) > epsilon
@@ -90,4 +90,4 @@ function deflated_newton_higher_dimension210(x0, x1, f, max_iter=1000, epsilon=1
     x
 end
 
-x3 =  deflated_newton_higher_dimension210(x0, x1, F)
+x3 =  deflated_newton_2(x0, x1, F)
