@@ -21,8 +21,10 @@ function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and ret
     v
 end
 
+
 y = zeros(n+1)
 A = jacobian(F, y)
+
 
 # Make jacobian invertible while preserving the boundary conditions
 A[1, 1] = 1
@@ -33,7 +35,7 @@ function M(x, x1, p=2, alpha=1)
 end
 
 
-function newton(f, x0, max_iter=5, eps=1e-13)
+function newton(f, x0, max_iter=1000, eps=1e-13)
     x = x0
     i = 0
     while norm(f(x)) > eps
@@ -42,6 +44,8 @@ function newton(f, x0, max_iter=5, eps=1e-13)
         end
         A = jacobian(f, x)
         # Have to make A invertible while preserving the boundary conditions
+        A[1, 1] = 1
+        A[end, end] = 1
         x = x - inv(A) * f(x)
         i += 1
     end
@@ -53,6 +57,7 @@ function deflated_newton(x0, x1, f)
     g = x -> M(x, x1) * f(x)
     newton(g, x0)
 end
+
 
 x0 = zeros(n+1)
 x1 = newton(F, x0)
