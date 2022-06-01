@@ -76,22 +76,30 @@ push!(fs, g)
 i(x) = last(fs)(x) * (x-1)
 i(5)
 
+function M(x, sol, p=2, alpha=1)
+    m=1
+    for sols in sol
+        m = m * (1 / norm(x-sols)^p + alpha)
+    end
+    return m
+end
+
 
 #Another function which finds all roots using deflated newton method
-function multroot(f, x0, n = 10)
-    fs = Vector{Function}(undef, n)
-    fs[1] = f
-    xn = newton(f, 0)
-    sol = [xn]
+function multroot(f, x0)
+    x = newton(f, x0)
+    sol = [x]
     k = 1
-    while xn != "Cannot converge."
+    while true
         k += 1
-        xn = last(sol)
-        fs[k] = x -> fs[k-1](x) * M(x, xn)
-        xnew = newton(fs[k], x0)
-        push!(sol, xnew)
+        fs = y -> f(y) * M(y,sol)
+        xnew = newton(fs, x0)
+        if xnew == "Cannot converge."
+            return sol
+        else
+            push!(sol, xnew)
+        end
     end
-    sol
 end
 
 multroot(g, 0)
