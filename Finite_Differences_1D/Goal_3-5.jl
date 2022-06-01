@@ -101,11 +101,13 @@ function bratu_solve(lambda, x0) # x0 is the initial guess
 end
 
 x0
+n = length(lambda)
 solution = []
-for lambda = 0.5: 0.1: 3
-    sol = bratu_solve(lambda, x0)
+for lambda = 0.1: 0.1: 4
+    sol = bratu_solve(lambda, F)
     push!(solution, sol)
 end
+solution
 
 lambda = 1:0.1:4
 bratu_solve(3.51, x0)
