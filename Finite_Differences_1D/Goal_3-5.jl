@@ -85,7 +85,8 @@ x3 =  deflated_newton_2(x0, x1, F)
 
 # Define a function that compute the solutions for different lambdas
 function bratu_solve(lambda, x0) # x0 is the initial guess
-    function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and returns a vector of length n+1
+    # Redefine the function F with different values of lambda
+    function F(u::AbstractVector{T}) where T 
         v = zeros(T, length(u))
         v[2] = 1 / h^2 * (-2u[2] + u[3]) + lambda * exp(u[2])
         for k = 2: n-2
@@ -99,10 +100,10 @@ function bratu_solve(lambda, x0) # x0 is the initial guess
     return (norm(x1), norm(x2))
 end
 
-x0
+# Compute a vector of solutions to make the plot
 n = length(lambda)
 solution = []
-for lambda = 0.1: 0.1: 4
+for lambda = 0: 0.1: 4
     sol = bratu_solve(lambda, F)
     push!(solution, sol)
 end
