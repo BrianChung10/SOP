@@ -35,7 +35,7 @@ function deflated_newton(x0, x1, f)
 end
 
 
-function newton_higher_dimension(f, x0, max_iter=1000, eps=1e-13)
+function deflated_newton_higher_dimension(f, x0, max_iter=1000, eps=1e-13)
     x = x0
     i = 0
     while norm(f(x)) > eps
@@ -55,21 +55,7 @@ function deflated_newton_higher_dimension(x0, x1, f)
 end
 
 
-# Solve for all roots by using deflated newton method
-function deflated_newton_solve_1d(f, x0)
-    x = newton(f, x0)
-    solution = [x]
-    while x != "Cannot converge."
-        f = y -> f(y) * M(y, x)
-        x0 = rand(-1000: 1000)
-        x = newton(f, x0)
-        push!(solution, x)
-    end
-    solution
-end
-
-
-function M(x, sol, p=2, alpha=1)
+function newm(x, sol, p=2, alpha=1)
     m=1
     for sols in sol
         m = m * (1 / norm(x-sols)^p + alpha)
@@ -83,7 +69,7 @@ function multroot(f, x0)
     x = newton(f, x0)
     sol = [x]
     while true
-        fs = y -> f(y) * M(y,sol)
+        fs = y -> f(y) * newm(y,sol)
         xnew = newton(fs, x0)
         if xnew == "Cannot converge."
             return sol
@@ -93,21 +79,21 @@ function multroot(f, x0)
     end
 end
 
+
 multroot(g, 0)
 
 
 # Test functions
 f(x) = (x-1) * (x-2)
 g(x) = (x-2) * (x+2) * (x+3)
-h(x) = sin(x)
-
 f1(x) = (x .- [1, 1]) .* (x .- [2, 2])
+
 
 # Tests
 deflated_newton(0, 1, f)
 deflated_newton(0.1, 2, g)
-deflated_newton(0.1, 0, h)
+deflated_newton(0.1, 0, sin)
 deflated_newton_higher_dimension([0, 0], [1, 1], f1)
-deflated_newton_solve_1d(f, 0)
+
 
 multroot(f, 0)
