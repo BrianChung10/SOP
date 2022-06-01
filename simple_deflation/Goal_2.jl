@@ -13,7 +13,6 @@ function M(x, x1, p=2, alpha=1)
 end
 
 
-# Goal 2
 # Implement the deflated_newton in one dimension
 function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
     x = x0
