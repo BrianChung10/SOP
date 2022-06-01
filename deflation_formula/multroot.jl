@@ -31,6 +31,7 @@ function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
     x
 end
 
+
 # Implement the deflated_newton in higher dimension
 function deflated_newton_higher_dimension(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
     x = x0
@@ -50,6 +51,7 @@ function deflated_newton_higher_dimension(x0, x1, f, max_iter=1000, epsilon=1e-1
     x
 end
 
+
 function M1(x, sol, p=2, alpha=1)
     m=1
     for sols in sol
@@ -57,6 +59,7 @@ function M1(x, sol, p=2, alpha=1)
     end
     return m
 end
+
 
 # Solve for all roots by using deflated newton method
 function deflated_newton_solve_1d(x0, x1, f)
@@ -74,6 +77,7 @@ function deflated_newton_solve_1d(x0, x1, f)
     end
 end
 
+
 function deflated_newton_solve_nd(x0, x1, f)
     x = deflated_newton_higher_dimension(x0, x1, f)
     solution = [x]
@@ -89,6 +93,7 @@ function deflated_newton_solve_nd(x0, x1, f)
     end
 end
 
+
 # Test functions
 f(x) = (x-1) * (x+1)
 g(x) = (x-2) * (x+2) * (x+3)
@@ -97,12 +102,13 @@ f1(x) = (x .- [1, 1]) .* (x .- [2, 2])
 f2(x) = (x .- [1, 1]) .* (x .- [2, 2]).*(x .- [3, 3])
 z(x) = (x-1) * (x-2) * (x-3) * (x-4)
 
+
 # Tests
 deflated_newton(-0.1, 1, f)
 deflated_newton(0.1, 2, g)
-deflated_newton(0.1, 0, h)
+deflated_newton(0.1, 0, sin)
 deflated_newton_higher_dimension([0.1,0.1],[1, 1],f1)
-deflated_newton_solve_1d(1,2,g)
-deflated_newton_solve_1d(0,1,z)
+deflated_newton_solve_1d(1, 2, g)
+deflated_newton_solve_1d(0, 1, z)
 deflated_newton_solve_nd([0.1,0.1],[1, 1],f2)
 deflated_newton_solve_nd([0.1,0.1],[1, 1],f1)
