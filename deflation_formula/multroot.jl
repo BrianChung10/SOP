@@ -9,10 +9,11 @@ import LinearAlgebra: norm
 
 # Define the shifted deflation operator
 function M(x, x1, p=2, alpha=1)
-    1 / norm(x-x1)^p + alpha
+    1 / norm(x - x1)^p + alpha
 end
 
 
+# Goal 2
 # Implement the deflated_newton in one dimension
 function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
     x = x0
@@ -26,7 +27,7 @@ function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-13, p=2)
         if i > max_iter
             return "Cannot converge."
         end
-        i = i + 1
+        i += 1
     end
     x
 end
@@ -65,7 +66,7 @@ end
 function deflated_newton_solve_1d(x0, x1, f)
     x = deflated_newton(x0, x1, f)
     solution = [x]
-    fs = x -> f(x)*M(x,x1)
+    fs = x -> f(x) * M(x,x1)
     while true
         x = deflated_newton(x0, x, fs)
         fs = y -> f(y) * M1(y,solution)
