@@ -110,3 +110,4 @@ deflated_newton(0.1, 0, h)
 deflated_newton_higher_dimension([0, 0], [1, 1], f1)
 deflated_newton_solve_1d(f, 0)
 
+multroot(f, 0)
