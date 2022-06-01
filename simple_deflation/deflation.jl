@@ -69,62 +69,38 @@ function deflated_newton_solve_1d(f, x0)
 end
 
 
-g(x) = (x-2) * (x+2) * (x+3)
-fs = Vector{Function}(undef, 1)
-fs[1] = f
-push!(fs, g)
-i(x) = last(fs)(x) * (x-1)
-i(5)
+function M(x, sol, p=2, alpha=1)
+    m=1
+    for sols in sol
+        m = m * (1 / norm(x-sols)^p + alpha)
+    end
+    return m
+end
 
 
 #Another function which finds all roots using deflated newton method
-function multroot(f, x0, n = 10)
-    fs = Vector{Function}(undef, n)
-    fs[1] = f
-    xn = newton(f, 0)
-    sol = [xn]
-    k = 1
-    while xn != "Cannot converge."
-        k += 1
-        xn = last(sol)
-        fs[k] = x -> fs[k-1](x) * M(x, xn)
-        xnew = newton(fs[k], x0)
-        push!(sol, xnew)
+function multroot(f, x0)
+    x = newton(f, x0)
+    sol = [x]
+    while true
+        fs = y -> f(y) * M(y,sol)
+        xnew = newton(fs, x0)
+        if xnew == "Cannot converge."
+            return sol
+        else
+            push!(sol, xnew)
+        end
     end
-    sol
 end
 
 multroot(g, 0)
-
-
-g(x) = (x-2) * (x+2) * (x+3)
-fs = Vector{Function}(undef, 10)
-fs[1] = g
-sol = [newton(g,0)]
-newton(g,0)
-fs[2] = x -> fs[1](x) * M(x, -3)
-newton(fs[2], 0)
-fs[3] = x -> fs[2](x) * M(x, -2)
-newton(fs[3], 0)
-fs[4] = x -> fs[3](x) * M(x, 2)
-newton(fs[4], 0)
-
-
-sol = [x1]
-xn = last(sol)
-fun(x) = last(fs)(x) * M(x, xn)
-newton(fun, 0)
-fun1(x) = fun(x) * M(x, -2)
-newton(fun1, 0)
-fun2(x) = fun1(x) * M(x, 2)
-newton(fun2, 0)
-
 
 
 # Test functions
 f(x) = (x-1) * (x-2)
 g(x) = (x-2) * (x+2) * (x+3)
 h(x) = sin(x)
+
 f1(x) = (x .- [1, 1]) .* (x .- [2, 2])
 
 # Tests
@@ -134,4 +110,3 @@ deflated_newton(0.1, 0, h)
 deflated_newton_higher_dimension([0, 0], [1, 1], f1)
 deflated_newton_solve_1d(f, 0)
 
-mult_root(f, 1.2, 10)
