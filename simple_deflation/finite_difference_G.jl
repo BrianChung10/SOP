@@ -90,4 +90,4 @@ function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
     x
 end
 
-x3 =  deflated_newton_2(x0, x1, F)
+x3 =  deflated_newton_2(x0, x1, F) 
