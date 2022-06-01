@@ -26,7 +26,7 @@ end
 
 
 function M(x, x1, p=2, alpha=1)
-    I(n+1) / norm(x-x1)^p + alpha * I(n+1)
+    1 / norm(x-x1)^p + alpha
 end
 
 
@@ -54,17 +54,13 @@ function deflated_newton(x0, x1, f)
 end
 
 
-# We obtain the solution of the ODE via (2.10)
+# We obtain the solution of the ODE via (2.6)
 x0 = zeros(n+1)
 x1 = newton(F, x0)
 x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE when lambda = 1
 
 
-function M2(x, x1, p=2, alpha=1)
-    1 / norm(x-x1)^p + alpha 
-end
-
-# Implement the deflated_newton in higher dimension
+# We obtain the solution of the ODE via (2.10)
 function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
     x = x0
     i = 0
@@ -73,8 +69,8 @@ function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
         B[1, 1] = 1
         B[end, end] = 1
         dx = -B \ f(x)
-        m = M2(x,x1)
-        temp_func(y) = M2(y, x1)
+        m = M(x,x1)
+        temp_func(y) = M(y, x1)
         m_de = gradient(temp_func, x)
         dy = (1+(1 / m)*m_de'*dx/(1-(1 / m)*m_de'*dx))*dx
         x = x + dy
@@ -87,3 +83,29 @@ function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
 end
 
 x3 =  deflated_newton_2(x0, x1, F)
+
+# Define a function that compute the solutions for different lambdas
+function bratu_solve(lambda, x0) # x0 is the initial guess
+    function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and returns a vector of length n+1
+        v = zeros(T, length(u))
+        v[2] = 1 / h^2 * (-2u[2] + u[3]) + lambda * exp(u[2])
+        for k = 2: n-2
+            v[k+1] = 1 / h^2 * (u[k] - 2u[k+1] + u[k+2]) + lambda * exp(u[k+1])
+        end
+        v[n] = 1 / h^2 * (u[n-1] - 2u[n]) + lambda * exp(u[n])
+        v
+    end
+    x1 = newton(F, x0)
+    x2 = deflated_newton(x0, x1, F)
+    return (norm(x1), norm(x2))
+end
+
+x0
+solution = []
+for lambda = 0.5: 0.1: 3
+    sol = bratu_solve(lambda, x0)
+    push!(solution, sol)
+end
+
+lambda = 1:0.1:4
+bratu_solve(3.51, x0)
