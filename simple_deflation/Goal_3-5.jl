@@ -1,6 +1,9 @@
+import Pkg
+Pkg.add("ForwardDiff")
+Pkg.add("LinearAlgebra")
 using ForwardDiff, LinearAlgebra
-import LinearAlgebra: inv
-import ForwardDiff: jacobian
+import ForwardDiff: derivative, jacobian, gradient
+import LinearAlgebra: norm, inv
 
 
 # First discretize the problem
@@ -51,37 +54,36 @@ function deflated_newton(x0, x1, f)
 end
 
 
-# We obtain the solution of the ODE via (2.6)
+# We obtain the solution of the ODE via (2.10)
 x0 = zeros(n+1)
 x1 = newton(F, x0)
 x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE when lambda = 1
 
 
-# Now solve the ODE via (2.10)
-function deflated_newton2(x0, x1, f, max_iter=1000, eps=1e-12)
+function M2(x, x1, p=2, alpha=1)
+    1 / norm(x-x1)^p + alpha 
+end
+
+# Implement the deflated_newton in higher dimension
+function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
     x = x0
     i = 0
-    while norm(f(x)) > eps
-        if i > max_iter
-            return "Cannot converge"
-        end
-        A = jacobian(f, x)
-        A[1, 1] = 1
-        A[end, end] = 1
-        dx = -A \ f(x)
-        m = M(x, x1)
-        temp(y) = M(y, x1)
-        m_de = jacobian(temp, x)
-        dy = (I(n+1) + (I(n+1) - m \ (m_de' * dx)) \ (m \ (m_de' * dx))) * dx
+    while norm(f(x)) > epsilon
+        B = jacobian(f, x)
+        B[1, 1] = 1
+        B[end, end] = 1
+        dx = -B \ f(x)
+        m = M2(x,x1)
+        temp_func(y) = M2(y, x1)
+        m_de = gradient(temp_func, x)
+        dy = (1+(1 / m)*m_de'*dx/(1-(1 / m)*m_de'*dx))*dx
         x = x + dy
-        i += 1
+        if i > max_iter
+            return "Cannot converge."
+        end
+        i = i + 1
     end
     x
 end
 
-x0 = zeros(n+1)
-x1 = newton(F, x0)
-x2 = deflated_newton2(x0, x1, F)
-
-temp(x) = M(x, x1)
-jacobian(temp, x0)
+x3 =  deflated_newton_2(x0, x1, F)
