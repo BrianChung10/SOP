@@ -10,11 +10,10 @@ import LinearAlgebra: norm, inv
 n = 100
 x = range(0, 1; length=n+1)
 h = step(x)
-lambda = 1
 
 
 # Implement the F[u] as defined in (3.7)
-function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and returns a vector of length n+1
+function F(u::AbstractVector{T}, lambda = 1) where T # F takes a vector of lengh n+1 and returns a vector of length n+1
     v = zeros(T, length(u))
     v[2] = 1 / h^2 * (-2u[2] + u[3]) + lambda * exp(u[2])
     for k = 2: n-2
@@ -108,4 +107,4 @@ for lambda = 0.5: 0.1: 3
 end
 
 lambda = 1:0.1:4
-bratu_solve(3.51, x0)
+bratu_solve(3.5154, x0)
