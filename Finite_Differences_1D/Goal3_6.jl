@@ -10,10 +10,10 @@ import LinearAlgebra: norm, inv
 n = 100
 x = range(0, 1; length=n+1)
 h = step(x)
-
+lambda = 1
 
 # Implement the F[u] as defined in (3.7)
-function F(u::AbstractVector{T}, lambda = 1) where T # F takes a vector of lengh n+1 and returns a vector of length n+1
+function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and returns a vector of length n+1
     v = zeros(T, length(u))
     v[2] = 1 / h^2 * (-2u[2] + u[3]) + lambda * exp(u[2])
     for k = 2: n-2
@@ -60,7 +60,7 @@ x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE when lambda = 1
 
 
 # We obtain the solution of the ODE via (2.10)
-function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
+function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10)
     x = x0
     i = 0
     while norm(f(x)) > epsilon
@@ -72,7 +72,7 @@ function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
         temp_func(y) = M(y, x1)
         m_de = gradient(temp_func, x)
         dy = (1+(1 / m)*m_de'*dx/(1-(1 / m)*m_de'*dx))*dx
-        x = x + dy
+        x = x + 0.7 * dy
         if i > max_iter
             return "Cannot converge."
         end
@@ -97,7 +97,7 @@ function bratu_solve(lambda, x0) # x0 is the initial guess
         v
     end
     x1 = newton(F, x0)
-    x2 = deflated_newton(x0, x1, F)
+    x2 = deflated_newton_2(x0, x1, F)
     return (norm(x1), norm(x2))
 end
 
@@ -107,7 +107,7 @@ function solutions()
     n = 100
     x0 = zeros(n+1)
     solution = []
-    for lambda = 0: 0.1: 3.6
+    for lambda = 0: 0.2: 4
         sol = bratu_solve(lambda, x0)
         push!(solution, sol)
     end

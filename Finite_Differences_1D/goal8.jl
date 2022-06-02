@@ -3,8 +3,8 @@ import ForwardDiff: derivative, jacobian, gradient
 import LinearAlgebra: norm, inv
 
 # First discretize the problem
-n = 100
-x = range(0, 1; length=n+1)
+n = 200
+x = range(0, 10; length=n+1)
 h = step(x)
 
 # Implement the F[u] as defined in (3.9)
@@ -30,7 +30,7 @@ function newton(f, x0, max_iter=1000, eps=1e-10)
         # Have to make A invertible while preserving the boundary conditions
         A[1, 1] = 1
         A[end, end] = 1
-        x = x - 0.7 * A \ f(x)
+        x = x - 0.5 * A \ f(x)
         i += 1
     end
     x
