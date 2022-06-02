@@ -1,6 +1,6 @@
 # Goal 9 Matrix
 
-function FD2D(n, U, h)
+function FD2D(n)
     A = zeros((n-1)^2,(n-1)^2)
     for k = 1:(n-1)^2
         A[k,k] = 4
@@ -17,4 +17,4 @@ function FD2D(n, U, h)
 end
 
 
-FD2D(4)
+B = FD2D(4)
