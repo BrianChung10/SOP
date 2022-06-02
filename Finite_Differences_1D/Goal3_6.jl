@@ -83,6 +83,7 @@ end
 
 x3 =  deflated_newton_2(x0, x1, F)
 
+
 # Define a function that compute the solutions for different lambdas
 function bratu_solve(lambda, x0) # x0 is the initial guess
     # Redefine the function F with different values of lambda
@@ -100,14 +101,20 @@ function bratu_solve(lambda, x0) # x0 is the initial guess
     return (norm(x1), norm(x2))
 end
 
-# Compute a vector of solutions to make the plot
-n = length(lambda)
-solution = []
-for lambda = 0: 0.1: 4
-    sol = bratu_solve(lambda, F)
-    push!(solution, sol)
-end
-solution
 
-lambda = 1:0.1:4
-bratu_solve(3.5154, x0)
+# Compute a vector of solutions to make the plot
+function solutions()
+    n = 100
+    x0 = zeros(n+1)
+    solution = []
+    for lambda = 0: 0.1: 3.6
+        sol = bratu_solve(lambda, x0)
+        push!(solution, sol)
+    end
+    solution
+end
+
+solutions = solutions()
+
+bratu_solve(1.1, x0) # Get SingularException error for this particular lambda
+bratu_solve(2, x0) # Get StackOverflow error for this particular lambda
