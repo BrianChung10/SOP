@@ -26,7 +26,7 @@ function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and ret
 end
 
 
-function M(x, x1, p=2, alpha=1)
+function M(x, x1, p=2, alpha=0)
     1 / norm(x-x1)^p + alpha
 end
 
@@ -42,12 +42,11 @@ function newton(f, x0, max_iter=1000, eps=1e-10)
         # Have to make A invertible while preserving the boundary conditions
         A[1, 1] = 1
         A[end, end] = 1
-        x = x - A \ f(x)
+        x = x - 0.95*A \ f(x) # damped
         i += 1
     end
     x
 end
-
 
 function deflated_newton(x0, x1, f)
     g = x -> M(x, x1) * f(x)
