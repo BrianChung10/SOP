@@ -10,16 +10,16 @@ import LinearAlgebra: norm, inv
 n = 100
 x = range(0, 1; length=n+1)
 h = step(x)
-lambda = 1
+lam = 1
 
 # Implement the F[u] as defined in (3.7)
 function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and returns a vector of length n+1
     v = zeros(T, length(u))
-    v[2] = 1 / h^2 * (-2u[2] + u[3]) + lambda * exp(u[2])
+    v[2] = 1 / h^2 * (-2u[2] + u[3]) + lam * exp(u[2])
     for k = 2: n-2
-        v[k+1] = 1 / h^2 * (u[k] - 2u[k+1] + u[k+2]) + lambda * exp(u[k+1])
+        v[k+1] = 1 / h^2 * (u[k] - 2u[k+1] + u[k+2]) + lam * exp(u[k+1])
     end
-    v[n] = 1 / h^2 * (u[n-1] - 2u[n]) + lambda * exp(u[n])
+    v[n] = 1 / h^2 * (u[n-1] - 2u[n]) + lam * exp(u[n])
     v
 end
 
