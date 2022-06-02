@@ -40,7 +40,7 @@ function newton(f, x0, max_iter=1000, eps=1e-10)
         # Have to make A invertible while preserving the boundary conditions
         A[1, 1] = 1
         A[end, end] = 1
-        x = x - A \ f(x)
+        x = x - qr(A) \ f(x)
         i += 1
     end
     x
