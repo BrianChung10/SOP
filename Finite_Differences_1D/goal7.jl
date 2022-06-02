@@ -7,10 +7,10 @@ import LinearAlgebra: norm, inv, cond
 n = 100
 x = range(0, 1; length=n+1)
 h = step(x)
-
+lambda = 1
 
 # Implement the F[u] as defined in (3.7)
-function F(u::AbstractVector{T}, lambda = 1) where T # F takes a vector of lengh n+1 and returns a vector of length n+1
+function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and returns a vector of length n+1
     v = zeros(T, length(u))
     v[2] = 1 / h^2 * (-2u[2] + u[3]) + lambda * exp(u[2])
     for k = 2: n-2
@@ -54,34 +54,40 @@ function deflated_newton_cond(x0, x1, f)
 end
 
 
-# We obtain the evolution of the condition number via (2.10)
+# We obtain the evolution of the condition number via (2.7)
+
 cond_number = newton_cond(F, x0)
 cond_number_deflated = deflated_newton_cond(x0, x1, F)
-plot(cond_number, title= "Evolution of the condition number 
+plot(log.(cond_number), title= "Evolution of the condition number 
 (naive implementations)", label="First solution")
-plot!(cond_number_deflated, label="Second solution")
+plot!(log.(cond_number_deflated), label="Second solution")
 
 
 # We obtain the solution of the ODE via (2.10)
-function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
+function deflated_newton_cond2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
     x = x0
     i = 0
+    cond_number = []
     while norm(f(x)) > epsilon
         B = jacobian(f, x)
         B[1, 1] = 1
         B[end, end] = 1
+        push!(cond_number, cond(B))
         dx = -B \ f(x)
         m = M(x,x1)
         temp_func(y) = M(y, x1)
         m_de = gradient(temp_func, x)
         dy = (1+(1 / m)*m_de'*dx/(1-(1 / m)*m_de'*dx))*dx
-        x = x + dy
+        x = x + 0.6 * dy # Damping newton iteration
         if i > max_iter
             return "Cannot converge."
         end
         i = i + 1
     end
-    x
+    cond_number
 end
 
-x3 =  deflated_newton_2(x0, x1, F)
+cond_number2 =  deflated_newton_cond2(x0, x1, F)
+plot(log.(cond_number), title= "Evolution of the condition number 
+(naive implementations)", label="First solution")
+plot!(log.(cond_number2), label="Second solution")
