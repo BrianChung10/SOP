@@ -15,9 +15,15 @@ function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and ret
         v[k+1] = 1 / h^2 * (u[k] - 2u[k+1] + u[k+2]) - u[k+1] ^ 2 + x[k+1]
     end
     v[n] = 1 / h^2 * (u[n-1] - 2u[n] + sqrt(10)) - u[n] ^ 2 + x[n]
-    v[n+1] = sqrt(10) + 10
+    v[n+1] = 0
     v
 end
+
+
+function M(x, x1, p=2, alpha=1)
+    1 / norm(x-x1)^p + alpha
+end
+
 
 function newton(f, x0, max_iter=1000, eps=1e-8)
     x = x0
@@ -44,11 +50,11 @@ function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-8)
         B[1, 1] = 1
         B[end, end] = 1
         dx = -B \ f(x)
-        m = M(x, x1)
-        temp_func(y) = M(y, x1)
+        m = M(x, x1, 2, 0)
+        temp_func(y) = M(y, x1, 2, 0)
         m_de = gradient(temp_func, x)
         dy = (1+(1 / m) * m_de' * dx / (1-(1 / m) * m_de' * dx)) * dx
-        x = x + 0.5 * dy
+        x = x + 0.2 * dy
         if i > max_iter
             return "Cannot converge."
         end
@@ -57,7 +63,12 @@ function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-8)
     x
 end
 
+
 x0 = zeros(n+1)
 x0[end] = sqrt(10)
 x1 = newton(F, x0)
 x2 = deflated_newton(x0, x1, F)
+
+
+plot(x1)
+plot!(x2)
