@@ -1,7 +1,7 @@
 import Pkg
 Pkg.add("ForwardDiff")
 Pkg.add("LinearAlgebra")
-using ForwardDiff, LinearAlgebra
+using ForwardDiff, LinearAlgebra, Plots
 import ForwardDiff: derivative, jacobian, gradient
 import LinearAlgebra: norm, inv
 
@@ -107,7 +107,7 @@ function solutions()
     n = 100
     x0 = zeros(n+1)
     solution = []
-    for lambda = 0: 0.2: 4
+    for lambda = 0: 0.04: 4
         sol = bratu_solve(lambda, x0)
         push!(solution, sol)
     end
@@ -116,5 +116,8 @@ end
 
 sol = solutions()
 
-bratu_solve(1.1, x0) # Get SingularException error for this particular lambda
-bratu_solve(2, x0) # Get StackOverflow error for this particular lambda
+
+line1 = [sol[i][1] for i = 1:length(sol)]
+line2 = [sol[i][2] for i = 1:length(sol)]
+plot(line1)
+plot!(line2)
