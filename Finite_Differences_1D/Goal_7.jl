@@ -56,6 +56,7 @@ end
 
 # We obtain the evolution of the condition number via (2.7)
 
+x0 = zeros(n+1)
 cond_number = newton_cond(F, x0)
 cond_number_deflated = deflated_newton_cond(x0, x1, F)
 plot(log.(cond_number), title= "Evolution of the condition number 
