@@ -42,6 +42,7 @@ function newton(f, x0, max_iter=1000, eps=1e-8)
     x
 end
 
+
 function deflated_newton(x0, x1, f, max_iter=1000, epsilon=1e-8)
     x = x0
     i = 0
