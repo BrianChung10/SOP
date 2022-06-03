@@ -26,7 +26,7 @@ function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and ret
 end
 
 
-function M(x, x1, p=2, alpha=0)
+function M(x, x1, p=4, alpha=0)
     1 / norm(x-x1)^p + alpha
 end
 
@@ -42,7 +42,7 @@ function newton(f, x0, max_iter=1000, eps=1e-10)
         # Have to make A invertible while preserving the boundary conditions
         A[1, 1] = 1
         A[end, end] = 1
-        x = x - 0.95*A \ f(x) # damped
+        x = x - 0.9*A \ f(x) # damped
         i += 1
     end
     x
@@ -85,6 +85,6 @@ function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
     x
 end
 
-
 x3 =  deflated_newton_2(x0, x1, F)
 plot(x3)
+# tried p = 3, p = 4 and a = 0, damped factor 0.9 -- simple vs standard gives different sols
