@@ -40,7 +40,7 @@ function newton(f, x0, max_iter=1000, eps=1e-10)
         # Have to make A invertible while preserving the boundary conditions
         A[1, 1] = 1
         A[end, end] = 1
-        x = x - qr(A) \ f(x)
+        x = x - 0.7 * (qr(A) \ f(x))
         i += 1
     end
     x
@@ -60,7 +60,7 @@ x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE when lambda = 1
 
 
 # We obtain the solution of the ODE via (2.10)
-function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10)
+function deflated_newton_2(x0, x1, f, max_iter=5000, epsilon=1e-10)
     x = x0
     i = 0
     while norm(f(x)) > epsilon
@@ -72,7 +72,7 @@ function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-10)
         temp_func(y) = M(y, x1)
         m_de = gradient(temp_func, x)
         dy = (1+(1 / m)*m_de'*dx/(1-(1 / m)*m_de'*dx))*dx
-        x = x + 0.7 * dy
+        x = x + 0.2 * dy
         if i > max_iter
             return "Cannot converge."
         end
@@ -98,18 +98,19 @@ function bratu_solve(lambda, x0) # x0 is the initial guess
     end
     x1 = newton(F, x0)
     x2 = deflated_newton_2(x0, x1, F)
-    return (norm(x1), norm(x2))
+    return x1, x2
 end
 
 
 # Compute a vector of solutions to make the plot
 function solutions()
     n = 100
-    x0 = zeros(n+1)
     solution = []
+    x0 = zeros(n+1)
     for lambda = 0: 0.04: 4
-        sol = bratu_solve(lambda, x0)
-        push!(solution, sol)
+        x1, x2 = bratu_solve(lambda, x0)
+        push!(solution, (norm(x1), norm(x2)))
+        x0 = x1
     end
     solution
 end
@@ -121,3 +122,5 @@ line1 = [sol[i][1] for i = 1:length(sol)]
 line2 = [sol[i][2] for i = 1:length(sol)]
 plot(line1)
 plot!(line2)
+line3 = [sol[i][2] for i = 1:length(sol)]
+plot!(line3)
