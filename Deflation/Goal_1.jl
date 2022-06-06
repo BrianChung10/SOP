@@ -35,7 +35,7 @@ function deflated_newton(x0, x1, f)
 end
 
 
-function deflated_newton_higher_dimension(f, x0, max_iter=1000, eps=1e-13)
+function newton_higher_dimension(f, x0, max_iter=1000, eps=1e-13)
     x = x0
     i = 0
     while norm(f(x)) > eps
@@ -86,6 +86,8 @@ multroot(g, 0)
 # Test functions
 f(x) = (x-1) * (x-2)
 g(x) = (x-2) * (x+2) * (x+3)
+l(x) = (x-1)^2
+m(x) = x^2-5*x+6
 f1(x) = (x .- [1, 1]) .* (x .- [2, 2])
 
 
@@ -96,4 +98,4 @@ deflated_newton(0.1, 0, sin)
 deflated_newton_higher_dimension([0, 0], [1, 1], f1)
 
 
-multroot(f, 0)
+multroot(m, 0)

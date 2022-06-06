@@ -1,5 +1,9 @@
 # Goal 9 Matrix
 
+using LinearAlgebra
+import LinearAlgebra: factorize
+
+
 function FD2D(n)
     A = zeros((n-1)^2,(n-1)^2)
     for k = 1:(n-1)^2
@@ -17,4 +21,4 @@ function FD2D(n)
 end
 
 
-B = FD2D(5)
+B = FD2D(4)
