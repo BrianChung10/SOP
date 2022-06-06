@@ -15,7 +15,7 @@ function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and ret
         v[k+1] = 1 / h^2 * (u[k] - 2u[k+1] + u[k+2]) - u[k+1] ^ 2 + x[k+1]
     end
     v[n] = 1 / h^2 * (u[n-1] - 2u[n] + sqrt(10)) - u[n] ^ 2 + x[n]
-    v[n+1] = 0
+    v[n+1] = u[end] - sqrt(10)
     v
 end
 
