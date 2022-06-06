@@ -33,17 +33,17 @@ end
 
 
 # Example 1: The Cubic-Parabola
-f(x, y) = 4x^3 - 3x - y
-g(x, y) = x^2 - y
+f(x, y) = 5x^3 - 4x - y
+g(x, y) = 3x^2 + x - y
 
-f1(x) = 4x^3 - 3x
-g1(x) = x^2
+f1(x) = 5x^3 - 4x
+g1(x) = 3x^2 + x
 
-plot(f1, -1.5, 1.5, label=L"5x^2-4x-y=0", title="The Cubic-Parabola Example")
+plot(f1, -1.5, 1.5, label=L"5x^3-4x-y=0", title="The Cubic-Parabola Example")
 plot!(g1, -1.5, 1.5, label=L"3x^2+x-y=0")
 
 
-x0 = [0.4; 0.9] # Initial guess
+x0 = [0.5; 0.5] # Initial guess
 h1(x) = [f(x[1], x[2]); g(x[1], x[2])] # Original function (Cubic-Parabola)
 x1 = newton(h1, x0) # Find the first root
 h2(x) = M(x, x1) * h1(x) # Define the deflated function
@@ -98,3 +98,14 @@ end
 plot_wireframe(xgrid,ygrid,z)
 
 ## new line
+
+
+
+
+# Figure 1.3
+f1(x) = sin(x)
+plot(f1, -1, 8, label=L"y=sin(x)")
+f2(x) = sin(x) / x
+plot!(f2, -1, 8, label=L"y=\frac{sin(x)}{x}")
+f2(x) = sin(x) / (x * (x-π))
+plot!(f2, -1, 8, label=L"y=\frac{sin(x)}{x(x-\pi)}")

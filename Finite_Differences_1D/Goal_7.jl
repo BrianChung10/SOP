@@ -49,7 +49,7 @@ end
 
 
 function deflated_newton_cond(x0, x1, f)
-    g = x -> M(x, x1) * f(x)
+    g = x -> f(x) * M(x, x1) 
     newton_cond(g, x0)
 end
 
@@ -59,9 +59,10 @@ end
 x0 = zeros(n+1)
 cond_number = newton_cond(F, x0)
 cond_number_deflated = deflated_newton_cond(x0, x1, F)
-plot(log.(cond_number), title= "Evolution of the condition number 
-(naive implementations)", label="First solution")
-plot!(log.(cond_number_deflated), label="Second solution")
+cond_number_deflated = cond_number_deflated[3: end]
+plot(cond_number, title= "Evolution of the condition number 
+(Naive implementations)", label="First solution", legend=:bottomright)
+plot!(cond_number_deflated, label="Second solution")
 
 
 # We obtain the solution of the ODE via (2.10)
@@ -90,5 +91,5 @@ end
 
 cond_number2 =  deflated_newton_cond2(x0, x1, F)
 plot(log.(cond_number), title= "Evolution of the condition number 
-(naive implementations)", label="First solution")
+(Standard implementations)", label="First solution", legend=:bottomright)
 plot!(log.(cond_number2), label="Second solution")
