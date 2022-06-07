@@ -31,4 +31,5 @@ function fd_2d(n)
     kron(A, I(n)) + kron(I(n), A)
 end
 
-fd_2d(6)
+fd_2d(4)
+fd_2d(9)
