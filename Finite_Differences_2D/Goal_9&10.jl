@@ -1,4 +1,5 @@
 using PlotlyJS
+using LinearAlgebra
 
 # function that computes the finite difference in 2D
 function fd_2d(n)
@@ -42,4 +43,29 @@ function poisson_contour(n)
     plot(data, layout)
 end
 
+poisson_contour(100)
 
+# Here is the solution of the Poisson equation in this case
+u(x, y) = sin(π * x) * sin(π * y)
+
+n = 100
+xrange = range(0, 1, length=n+1)
+yrange = range(0, 1, length=n+1)
+u_vec = zeros((n-1)^2)
+    index = 1
+    for i = 2: 100
+        for j = 2: 100
+            u_vec[index] = u(xrange[i], yrange[j])
+            index += 1
+        end
+    end
+u_vec
+
+u_matrix = reshape(u_vec, n-1, n-1)
+
+data = contour(; z=u_matrix)
+layout = Layout(;title="Contour Plot of Poisson Equation")
+plot(data, layout)
+
+# Find the different numerical and actual solution
+error = norm(u_vec - sol)
