@@ -16,7 +16,7 @@ function possion_solve(n)
     yrange = range(0, 1, length=n+1)
     h = step(xrange)
 
-    f(x, y) = 2π^2 * sin(π * x)sin(π * y)
+    f(x, y) = 2π^2 * sin(π * x) * sin(π * y)
 
     f_vec = zeros((n-1)^2)
     index = 1
@@ -31,10 +31,15 @@ function possion_solve(n)
     A \ f_vec
 end
 
-n = 100
-sol = possion_solve(n)
-sol = reshape(sol, n-1, n-1)
+sol = possion_solve(100)
 
-data = contour(; z=sol)
-layout = Layout(;title="Contour Plot of Poisson Equation")
-plot(data, layout)
+function poisson_contour(n)
+    sol = possion_solve(n)
+    sol = reshape(sol, n-1, n-1)
+
+    data = contour(; z=sol)
+    layout = Layout(;title="Contour Plot of Poisson Equation")
+    plot(data, layout)
+end
+
+

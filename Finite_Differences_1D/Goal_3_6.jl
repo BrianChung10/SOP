@@ -53,11 +53,16 @@ function deflated_newton(x0, x1, f)
 end
 
 
-# We obtain the solution of the ODE via (2.6)
+# We start with an initial guess of x0 being the zero vector
 x0 = zeros(n+1)
+# Obtain the first solution using the Newton's method
 x1 = newton(F, x0)
-x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE when lambda = 1
+# Obtain the second solution using the deflation 
+g = x -> M(x, x1) * F(x)
+x2 = newton(g, x0)
 
+plot(x1, title="The solutions for the Bratu equation", label="The first solution")
+plot!(x2, label="The second solution")
 
 # We obtain the solution of the ODE via (2.10)
 function deflated_newton_2(x0, x1, f, max_iter=5000, epsilon=1e-10)
