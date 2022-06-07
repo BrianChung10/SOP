@@ -22,3 +22,13 @@ end
 
 
 B = FD2D(4)
+B = FD2D(5) # Incorrect
+
+# function that computes the finite difference in 2D
+function fd_2d(n)
+    n -= 1
+    A = Tridiagonal(fill(-1, n-1), fill(2, n), fill(-1, n-1))
+    kron(A, I(n)) + kron(I(n), A)
+end
+
+fd_2d(6)
