@@ -1,18 +1,19 @@
 using PlotlyJS
 using LinearAlgebra
+using SparseArrays
 
 # function that computes the finite difference in 2D
 function fd_2d(n)
     n -= 1
     A = Tridiagonal(fill(-1, n-1), fill(2, n), fill(-1, n-1))
-    kron(A, I(n)) + kron(I(n), A)
+    sparse(kron(A, I(n)) + kron(I(n), A))
 end
 
-fd_2d(4)
-fd_2d(5)
+A = fd_2d(4)
+A = sparse(A)
 
 # Approximately solve Possion's equation with homogeneous Dirichlet boundary conditions
-function possion_solve(n)
+function poisson_solve(n)
     xrange = range(0, 1, length=n+1)
     yrange = range(0, 1, length=n+1)
     h = step(xrange)
@@ -21,8 +22,8 @@ function possion_solve(n)
 
     f_vec = zeros((n-1)^2)
     index = 1
-    for i = 2: 100
-        for j = 2: 100
+    for i = 2: n
+        for j = 2: n
             f_vec[index] = f(xrange[i], yrange[j])
             index += 1
         end
@@ -32,10 +33,10 @@ function possion_solve(n)
     A \ f_vec
 end
 
-sol = possion_solve(100)
+sol = poisson_solve(100)
 
 function poisson_contour(n)
-    sol = possion_solve(n)
+    sol = poisson_solve(n)
     sol = reshape(sol, n-1, n-1)
 
     data = contour(; z=sol)
@@ -49,17 +50,21 @@ poisson_contour(100)
 u(x, y) = sin(π * x) * sin(π * y)
 
 n = 100
-xrange = range(0, 1, length=n+1)
-yrange = range(0, 1, length=n+1)
-u_vec = zeros((n-1)^2)
+function actuaL_sol(n)
+    xrange = range(0, 1, length=n+1)
+    yrange = range(0, 1, length=n+1)
+    u_vec = zeros((n-1)^2)
     index = 1
-    for i = 2: 100
-        for j = 2: 100
+    for i = 2: n
+        for j = 2: n
             u_vec[index] = u(xrange[i], yrange[j])
             index += 1
         end
     end
-u_vec
+    u_vec
+end
+
+u_vec = actuaL_sol(n)
 
 u_matrix = reshape(u_vec, n-1, n-1)
 
@@ -69,3 +74,21 @@ plot(data, layout)
 
 # Find the different numerical and actual solution
 error = norm(u_vec - sol)
+
+sol = poisson_solve(20)
+u_vec = actuaL_sol(20)
+
+function error_approx(up_bound)
+    error = []
+    for n = 10: up_bound
+        sol = poisson_solve(n)
+        u_vec = actuaL_sol(n)
+        push!(error, norm(sol-u_vec))
+    end
+    error
+end
+
+error = error_approx(100)
+error1 = float.(error)
+
+plot((error1))
