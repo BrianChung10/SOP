@@ -26,12 +26,12 @@ function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and ret
 end
 
 
-function M(x, x1, p=2, alpha=0)
+function M(x, x1, p=2, alpha=1)
     1 / norm(x-x1)^p + alpha
 end
 
 
-function newton(f, x0, max_iter=1000, eps=1e-10)
+function newton(f, x0, max_iter=1000, eps=1e-4)
     x = x0
     i = 0
     while norm(f(x)) > eps
@@ -59,7 +59,8 @@ x0 = zeros(n+1)
 x0[end] = sqrt(10)
 x1 = newton(F, x0)
 x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE
-plot(x1)plot!(x2)
+plot(x1)
+plot!(x2)
 
 # We obtain the solution of the ODE via (2.10)
 function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-8)
