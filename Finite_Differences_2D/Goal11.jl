@@ -21,7 +21,7 @@ function F(u::AbstractVector{T}) where T # F takes a vector of lengh (n-1)^2 and
     yrange = range(-12, 12, length=n+1)
     h = step(xrange)
 
-    v = -1/2 * (1/h) * A * u # First term
+    v = -1/2 * (1/h) * A * u # First termS
     v += abs.(u) .^ 2 .* u # Second term
     index = 1
     for i = 2: length(xrange)-1  # Third term
