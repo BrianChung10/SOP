@@ -12,6 +12,7 @@ x = range(0, 1; length=n+1)
 h = step(x)
 lam = 1
 
+
 # Implement the F[u] as defined in (3.7)
 function F(u::AbstractVector{T}) where T # F takes a vector of lengh n+1 and returns a vector of length n+1
     v = zeros(T, length(u))
@@ -58,7 +59,7 @@ x0 = zeros(n+1)
 # Obtain the first solution using the Newton's method
 x1 = newton(F, x0)
 # Obtain the second solution using the deflation 
-g = x -> M(x, x1) * F(x)
+g(x) = x -> M(x, x1) * F(x)
 x2 = newton(g, x0)
 
 plot(x1, title="The solutions for the Bratu equation", label="The first solution")
