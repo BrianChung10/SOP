@@ -126,5 +126,5 @@ sol = solutions()
 
 line1 = [sol[i][1] for i = 1:length(sol)]
 line2 = [sol[i][2] for i = 1:length(sol)]
-plot(line1, title="Bifurcation diagram for the Bratu equation", label="The first ")
-plot!(line2)
+plot(line1, title="Bifurcation diagram for the Bratu equation", label="The first solution")
+plot!(line2, label="The second solution")
