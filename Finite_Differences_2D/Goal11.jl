@@ -10,7 +10,7 @@ end
 
 
 n = 100
-A = fd_2d(n)
+A = fd_2d(3)
 
 n = 100
 μ = 0.2
@@ -21,7 +21,7 @@ function F(u::AbstractVector{T}) where T # F takes a vector of lengh (n-1)^2 and
     yrange = range(-12, 12, length=n+1)
     h = step(xrange)
 
-    v = -1/2 * (1/h) * A * u # First term
+    v = 1/2 * (1/h^2) * A * u # First term
     v += abs.(u) .^ 2 .* u # Second term
     index = 1
     for i = 2: length(xrange)-1  # Third term
