@@ -78,7 +78,7 @@ function deflated_newton_2(x0, x1, f, max_iter=5000, epsilon=1e-10)
         temp_func(y) = M(y, x1)
         m_de = gradient(temp_func, x)
         dy = (1+(1 / m)*m_de'*dx/(1-(1 / m)*m_de'*dx))*dx
-        x = x + 0.2 * dy
+        x = x + dy
         if i > max_iter
             return "Cannot converge."
         end
@@ -91,7 +91,7 @@ x3 =  deflated_newton_2(x0, x1, F)
 
 
 # Define a function that compute the solutions for different lambdas
-function bratu_solve(lambda, x0) # x0 is the initial guess
+function bratu_solve(lambda, x0_1, x0_2) # x0 is the initial guess
     # Redefine the function F with different values of lambda
     function F(u::AbstractVector{T}) where T 
         v = zeros(T, length(u))
@@ -102,8 +102,8 @@ function bratu_solve(lambda, x0) # x0 is the initial guess
         v[n] = 1 / h^2 * (u[n-1] - 2u[n]) + lambda * exp(u[n])
         v
     end
-    x1 = newton(F, x0)
-    x2 = deflated_newton_2(x0, x1, F)
+    x1 = newton(F, x0_1)
+    x2 = deflated_newton_2(x0_2, x1, F)
     return x1, x2
 end
 
@@ -112,21 +112,19 @@ end
 function solutions()
     n = 100
     solution = []
-    x0 = zeros(n+1)
-    for lambda = 0: 0.04: 4
-        x1, x2 = bratu_solve(lambda, x0)
+    x0_1 = zeros(n+1)
+    x0_2 = zeros(n+1)
+    for lambda = 0.02: 0.01: 4
+        x1, x2 = bratu_solve(lambda, x0_1, x0_2)
         push!(solution, (norm(x1), norm(x2)))
-        x0 = x1
+        x0_2 = x2
     end
     solution
 end
 
 sol = solutions()
 
-
 line1 = [sol[i][1] for i = 1:length(sol)]
 line2 = [sol[i][2] for i = 1:length(sol)]
-plot(line1)
-plot!(line2)
-line3 = [sol[i][2] for i = 1:length(sol)]
-plot!(line3)
+plot(line1, title="Bifurcation diagram for the Bratu equation", label="The first solution")
+plot!(line2, label="The second solution")
