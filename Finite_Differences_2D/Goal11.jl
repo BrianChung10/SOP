@@ -1,12 +1,13 @@
 using PlotlyJS, LinearAlgebra, SparseArrays
 import ForwardDiff: derivative, jacobian, gradient
 import LinearAlgebra: norm, inv
+import SparseArrays: sparse
 
 # function that computes the finite difference in 2D
 function fd_2d(n)
     n -= 1
     A = Tridiagonal(fill(-1, n-1), fill(2, n), fill(-1, n-1))
-    kron(A, I(n)) + kron(I(n), A)
+    kron(sparse(A), sparse(I(n))) + kron(sparse(I(n)), sparse(A))
 end
 
 
