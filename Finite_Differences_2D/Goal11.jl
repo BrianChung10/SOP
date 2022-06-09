@@ -6,11 +6,11 @@ import LinearAlgebra: norm, inv
 function fd_2d(n)
     n -= 1
     A = Tridiagonal(fill(-1, n-1), fill(2, n), fill(-1, n-1))
-    sparse(kron(A, I(n)) + kron(I(n), A))
+    kron(A, I(n)) + kron(I(n), A)
 end
 
 
-n = 100
+n = 4
 A = fd_2d(n)
 
 
@@ -68,11 +68,18 @@ F1(x) = M(x, x1) * F(x)
 x2 = newton(F1, x0)
 F2(x) = M(x, x2) * F1(x)
 x3 = newton(F2, x0)
+F3(x) = M(x, x3) * F2(x)
+x4 = newton(F3, x0)
 
 x1_mat = reshape(x1, n-1, n-1)
 x2_mat = reshape(x2, n-1, n-1)
 x3_mat = reshape(x3, n-1, n-1)
 
-data = contour(; z=x1_mat)
-layout = Layout(;title="Contour Plot of sol")
-plot(data, layout)
+data1 = contour(; z=x1_mat, contours_coloring="heatmap", line_width=0)
+plot(data1)
+
+data2 = contour(; z=x2_mat, contours_coloring="heatmap", line_width=0)
+plot(data2)
+
+data3 = contour(; z=x3_mat, contours_coloring="heatmap", line_width=0)
+plot(data3)

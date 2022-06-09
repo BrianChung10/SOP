@@ -2,7 +2,7 @@ import Pkg
 Pkg.add("ForwardDiff")
 Pkg.add("LinearAlgebra")
 Pkg.add("Plots")
-using ForwardDiff, LinearAlgebra, Plots
+using ForwardDiff, LinearAlgebra, Plots, LaTeXStrings
 import ForwardDiff: derivative, jacobian, gradient
 import LinearAlgebra: norm, inv
 
@@ -60,9 +60,8 @@ x0[end] = sqrt(10)
 x1 = newton(F, x0)
 x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE
 
-plot(x1)
-
-plot!(x2)
+plot(x1, title="Solutions for Painleve equation", legend=:bottomright, label=L"u_1")
+plot!(x2, label=L"u_2")
 
 # We obtain the solution of the ODE via (2.10)
 function deflated_newton_2(x0, x1, f, max_iter=1000, epsilon=1e-8)
