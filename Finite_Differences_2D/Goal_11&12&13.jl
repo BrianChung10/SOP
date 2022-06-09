@@ -71,6 +71,8 @@ F2(x) = M(x, x2) * F1(x)
 x3 = newton(F2, x0)
 F3(x) = M(x, x3) * F2(x)
 x4 = newton(F3, x0)
+F4(x) = M(x, x4) * F3(x)
+x5 = newton(F3, x0)
 
 x1_mat = reshape(x1, n-1, n-1)
 x2_mat = reshape(x2, n-1, n-1)

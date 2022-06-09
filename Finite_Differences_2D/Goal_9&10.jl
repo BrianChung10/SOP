@@ -1,4 +1,5 @@
 using PlotlyJS
+using Plots, LaTeXStrings
 using LinearAlgebra
 using SparseArrays
 
@@ -6,11 +7,11 @@ using SparseArrays
 function fd_2d(n)
     n -= 1
     A = Tridiagonal(fill(-1, n-1), fill(2, n), fill(-1, n-1))
-    sparse(kron(A, I(n)) + kron(I(n), A))
+    kron(sparse(A), sparse(I(n))) + kron(sparse(I(n)), sparse(A))
 end
 
 A = fd_2d(4)
-A = sparse(A)
+
 
 # Approximately solve Possion's equation with homogeneous Dirichlet boundary conditions
 function poisson_solve(n)
@@ -91,7 +92,8 @@ function error_approx(up_bound)
     error
 end
 
-error = error_approx(100)
+error = error_approx(200)
 error1 = float.(error)
+n = 10: 200
 
-plot((error1))
+plot(n, error1, title="Difference between numerical and actual solution", label="Error")
