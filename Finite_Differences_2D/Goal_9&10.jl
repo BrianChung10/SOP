@@ -38,11 +38,14 @@ end
 
 sol = poisson_solve(100)
 
+# Change color of the contour
+colorscale = [[0, "black"], [1, "white"]]
+
 function poisson_contour(n)
     sol = poisson_solve(n)
     sol = reshape(sol, n-1, n-1)
 
-    data = contour(; z=sol)
+    data = contour(; z=sol, contours_coloring="heatmap", line_width=0)
     layout = Layout(;title="Contour Plot of Poisson Equation")
     plot(data, layout)
 end

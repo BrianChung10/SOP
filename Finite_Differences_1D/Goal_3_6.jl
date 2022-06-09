@@ -1,7 +1,7 @@
 import Pkg
 Pkg.add("ForwardDiff")
 Pkg.add("LinearAlgebra")
-using ForwardDiff, LinearAlgebra, Plots
+using ForwardDiff, LinearAlgebra, Plots, LaTeXStrings
 import ForwardDiff: derivative, jacobian, gradient
 import LinearAlgebra: norm, inv
 
@@ -123,8 +123,11 @@ function solutions()
 end
 
 sol = solutions()
+lambda = 0.02: 0.01: 4
 
 line1 = [sol[i][1] for i = 1:length(sol)]
 line2 = [sol[i][2] for i = 1:length(sol)]
-plot(line1, title="Bifurcation diagram for the Bratu equation", label="The first solution")
-plot!(line2, label="The second solution")
+plot(lambda, line1, title="Bifurcation diagram for the Bratu equation", label=L"||\mathbf{u}_1||")
+plot!(lambda, line2, label=L"||\mathbf{u}_2||")
+lambda1 = (3.51383, 8.7)
+scatter!(lambda1, label=L"\lambda_{*}")
