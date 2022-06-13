@@ -1,3 +1,5 @@
+import Pkg
+Pkg.add("PlotlyJS")
 using PlotlyJS
 using Plots, LaTeXStrings
 using LinearAlgebra
@@ -11,6 +13,7 @@ function fd_2d(n)
 end
 
 A = fd_2d(4)
+
 
 
 # Approximately solve Possion's equation with homogeneous Dirichlet boundary conditions
@@ -48,10 +51,13 @@ function poisson_contour(n)
     plot(data, layout)
 end
 
+
 poisson_contour(100)
+
 
 # Here is the solution of the Poisson equation in this case
 u(x, y) = sin(π * x) * sin(π * y)
+
 
 n = 100
 function actuaL_sol(n)
@@ -70,11 +76,14 @@ end
 
 u_vec = actuaL_sol(n)
 
+
 u_matrix = reshape(u_vec, n-1, n-1)
+
 
 data = contour(; z=u_matrix)
 layout = Layout(;title="Contour Plot of Poisson Equation")
 plot(data, layout)
+
 
 # Find the different numerical and actual solution
 error = norm(u_vec - sol)

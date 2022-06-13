@@ -13,8 +13,8 @@ end
 A = fd_2d(4)
 
 
-n = 50
-μ = 0.4
+n = 100
+μ = 0.6 # Now make μ = 3ω
 function F(u::AbstractVector{T}) where T # F takes a vector of lengh (n-1)^2 and returns a vector of length (n-1)^2
     ω = 0.2 # ω is fixed at 0.2
     A = fd_2d(n)
@@ -41,6 +41,32 @@ function M(x, x1, p=2, alpha=1) # Modified deflation operator
 end
 
 
+function jacobian_s(u) # u is a (n-1) * (n-1) vector
+    ω = 0.2
+    v = zeros((n-1)^2)
+
+    xrange = range(-12, 12, length=n+1)
+    yrange = range(-12, 12, length=n+1)
+    h = step(xrange)
+
+    index = 1
+    for i = 2: n
+        for j = 2: n
+            v[index] += 1 / 2 * ω^2 * (xrange[i]^2 + yrange[j]^2)
+            index += 1
+        end
+    end
+    v = v .- μ
+    v += 3 * u .^ 2
+    (1/2) * (1/h^2) * fd_2d(n) + Diagonal(v)
+end
+
+x0 = zeros((n-1)^2)
+A = jacobian_s(x0)
+B = jacobian(F, x0)
+A - B
+
+
 function newton(f, x0, max_iter=1000, eps=1e-5)
     x = x0
     i = 0
@@ -55,10 +81,49 @@ function newton(f, x0, max_iter=1000, eps=1e-5)
     x
 end
 
+
+function newton_s(f, x0, max_iter=1000, eps=1e-5)
+    x = x0
+    i = 0
+    while norm(f(x)) > eps
+        if i > max_iter
+            return "Cannot converge."
+        end
+        A = jacobian_s(x)
+        x = x - 0.6 * (qr(A) \ f(x)) 
+        i += 1
+    end
+    x
+end
+
+
 function deflated_newton(x0, x1, f)
     g = x -> M(x, x1) * f(x)
     newton(g, x0)
 end
+
+
+# Newton with hand coded jacobian matrix
+x0 = -0.05 .* ones((n-1)^2)
+x1 = newton_s(F, x0)
+F1(x) = M(x, x1) * F(x)
+x2 = newton_s(F1, x0)
+F2(x) = M(x, x2) * F1(x)
+x3 = newton_s(F2, x0)
+F3(x) = M(x, x3) * F2(x)
+x4 = newton_s(F3, x0)
+F4(x) = M(x, x4) * F3(x)
+x5 = newton_s(F4, x0)
+F5(x) = M(x, x5) * F4(x)
+x6 = newton_s(F5, x0)
+F6(x) = M(x, x6) * F5(x)
+x7 = newton_s(F6, x0)
+F7(x) = M(x, x7) * F6(x)
+x8 = newton_s(F7, x0)
+
+
+
+
 
 
 x0 = 1/2 .* ones((n-1)^2)
