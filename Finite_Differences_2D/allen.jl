@@ -40,9 +40,10 @@ function F(u::AbstractVector{T}) where T
             v[i, j] = -δ * (4U[i, j] + U[i, j-1] + U[i, j+1] + U[i-1, j] + U[i+1, j]) - h^2 * 1/δ * (U[i, j]^3 - U[i, j])
         end
     end
-    
+
     convert(Vector{Float64}, vec(v'))
 end
+
 
 function newton(f, x0, max_iter=1000, eps=1e-8)
     x = x0

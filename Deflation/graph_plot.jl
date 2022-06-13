@@ -1,69 +1,36 @@
-import Pkg
-Pkg.add("Contour")
-using Plots
+using Plots, LaTeXStrings
 using LinearAlgebra, ForwardDiff
-import PyPlot
-import Contour: contours, levels, level, lines, coordinates
+import ForwardDiff: derivative
 
-gr()
-function plot_implicit(F, c=0;
-                       xrng=(-5,5), yrng=xrng, zrng=xrng,
-                       nlevels=6,         # number of levels in a direction
-                       slices=Dict(:x => :blue,
-                                   :y => :red,
-                                   :z => :green), # which directions and color
-                       kwargs...          # passed to initial `plot` call
-                       )
+f(x) = sin(x)
 
-    _linspace(rng, n=150) = range(rng[1], stop=rng[2], length=n)
+xrange = range(1.5, 4.5, length=100)
 
-    X1, Y1, Z1 = _linspace(xrng), _linspace(yrng), _linspace(zrng)
+p = plot(xrange, f.(xrange), label=L"$y=\sin(x)$")
+x0 = 2
+f1(x) = derivative(f, x0) * (x - x0) + f(x0)
+x1 = -f(x0)/derivative(f, x0) + x0 
 
-    p = Plots.plot(;legend=false,kwargs...)
+xrange1 = range(x0, x1, length=100)
+plot!(xrange1, f1.(xrange1), label="", color="orange")
+plot!([x0], seriestype=:vline, label="", color="orange")
+plot!([0], seriestype=:hline, label="", color="black")
+plot!([x1], seriestype=:vline, label="", color="orange")
 
-    if :x ∈ keys(slices)
-        for x in _linspace(xrng, nlevels)
-            local X1 = [F(x,y,z) for y in Y1, z in Z1]
-            cnt = contours(Y1,Z1,X1, [c])
-            for line in lines(levels(cnt)[1])
-                ys, zs = coordinates(line) # coordinates of this line segment
-                plot!(p, x .+ 0 * ys, ys, zs, color=slices[:x])
-          end
-        end
-    end
+x2 = -f(x1)/derivative(f, x1) + x1
+f2(x) = derivative(f, x1) * (x - x1) + f(x1)
+xrange2 = range(x1, x2, length=100)
 
-    if :y ∈ keys(slices)
-        for y in _linspace(yrng, nlevels)
-            local Y1 = [F(x,y,z) for x in X1, z in Z1]
-            cnt = contours(Z1,X1,Y1, [c])
-            for line in lines(levels(cnt)[1])
-                xs, zs = coordinates(line) # coordinates of this line segment
-                plot!(p, xs, y .+ 0 * xs, zs, color=slices[:y])
-            end
-        end
-    end
+plot!(xrange2, f2.(xrange2), label="", color="orange")
+vline!([x2], label="", color="orange")
 
-    if :z ∈ keys(slices)
-        for z in _linspace(zrng, nlevels)
-            local Z1 = [F(x, y, z) for x in X1, y in Y1]
-            cnt = contours(X1, Y1, Z1, [c])
-            for line in lines(levels(cnt)[1])
-                xs, ys = coordinates(line) # coordinates of this line segment
-                plot!(p, xs, ys, z .+ 0 * xs, color=slices[:z])
-            end
-        end
-    end
+f3(x) = derivative(f, x2) * (x - x2) + f(x2)
+x3 = -f(x2)/derivative(f, x2) + x2
+xrange3 = range(x2, x3, length=100)
+plot!(xrange3, f3.(xrange3), label="", color="orange")
 
+scatter!((x0, 0), label=L"x_0")
+scatter!((x1, 0), label=L"x_1", color="yellow")
+scatter!((x2, 0), label=L"x_2", color="red")
+scatter!((x3, 0), label=L"x_3")
 
-    p
-end
-
-f(x,y,z) = x^2 + y^2 + z^2 - 25
-plot_implicit(f)
-
-plot_implicit(f, nlevels=20, slices=Dict(:z=>:blue))
-
-a,b = 1,3
-f(x,y,z) = (x^2+((1+b)*y)^2+z^2-1)^3-x^2*z^3-a*y^2*z^3
-plot_implicit(f, xrng=(-2,2),yrng=(-1,1),zrng=(-1,2),
-   nlevels=40, slices=Dict(:z=>:blue))

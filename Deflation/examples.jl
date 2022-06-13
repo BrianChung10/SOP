@@ -1,6 +1,3 @@
-import Pkg
-Pkg.add("PlotlyJS")
-Pkg.add("LaTeXStrings")
 using Plots
 using ForwardDiff, LinearAlgebra, LaTeXStrings
 import ForwardDiff: derivative, jacobian
@@ -56,11 +53,11 @@ sol = [x1, x2, x3]
 function mag_zero()
     success = 0
     fail = 0
-    for i = 0: 0.1: 1
-        for j = 0: 0.1: 1
+    for i = -1: 0.1: 1
+        for j = -1: 0.1: 1
             x0 = [i; j]
             x1 = newton(h1, x0)
-            if norm(x1 - [0; 0]) < 1e-9
+            if norm(x1 - [0; 0]) < 1e-10
                 success += 1
             else
                 fail += 1
