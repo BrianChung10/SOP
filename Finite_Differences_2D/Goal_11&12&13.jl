@@ -14,7 +14,7 @@ A = fd_2d(4)
 
 
 n = 100
-μ = 0.4 # Now make μ = 2ω
+μ = 0.6 # Now make μ = 3ω
 function F(u::AbstractVector{T}) where T # F takes a vector of lengh (n-1)^2 and returns a vector of length (n-1)^2
     ω = 0.2 # ω is fixed at 0.2
     A = fd_2d(n)
@@ -64,7 +64,7 @@ end
 x0 = zeros((n-1)^2)
 A = jacobian_s(x0)
 B = jacobian(F, x0)
-
+A - B
 
 
 function newton(f, x0, max_iter=1000, eps=1e-5)
@@ -90,7 +90,7 @@ function newton_s(f, x0, max_iter=1000, eps=1e-5)
             return "Cannot converge."
         end
         A = jacobian_s(x)
-        x = x - (qr(A) \ f(x)) 
+        x = x - 0.6 * (qr(A) \ f(x)) 
         i += 1
     end
     x
@@ -104,7 +104,7 @@ end
 
 
 # Newton with hand coded jacobian matrix
-x0 = 1/2 .* ones((n-1)^2)
+x0 = -0.05 .* ones((n-1)^2)
 x1 = newton_s(F, x0)
 F1(x) = M(x, x1) * F(x)
 x2 = newton_s(F1, x0)
@@ -113,13 +113,13 @@ x3 = newton_s(F2, x0)
 F3(x) = M(x, x3) * F2(x)
 x4 = newton_s(F3, x0)
 F4(x) = M(x, x4) * F3(x)
-x5 = newton(F4, x0)
+x5 = newton_s(F4, x0)
 F5(x) = M(x, x5) * F4(x)
-x6 = newton(F5, x0)
+x6 = newton_s(F5, x0)
 F6(x) = M(x, x6) * F5(x)
-x7 = newton(F6, x0)
+x7 = newton_s(F6, x0)
 F7(x) = M(x, x7) * F6(x)
-x8 = newton(F7, x0)
+x8 = newton_s(F7, x0)
 
 
 
