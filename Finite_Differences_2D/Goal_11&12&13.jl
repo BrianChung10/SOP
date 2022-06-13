@@ -90,7 +90,7 @@ function newton_s(f, x0, max_iter=1000, eps=1e-5)
             return "Cannot converge."
         end
         A = jacobian_s(x)
-        x = x - 0.7 * (qr(A) \ f(x)) 
+        x = x - (qr(A) \ f(x)) 
         i += 1
     end
     x
