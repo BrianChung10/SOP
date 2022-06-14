@@ -1,4 +1,4 @@
-using ForwardDiff, LinearAlgebra, Plots
+using ForwardDiff, LinearAlgebra, Plots, LaTeXStrings
 import ForwardDiff: derivative, jacobian, gradient
 import LinearAlgebra: norm, inv, cond
 
@@ -90,5 +90,5 @@ function deflated_newton_cond2(x0, x1, f, max_iter=1000, epsilon=1e-10, p=2)
 end
 
 cond_number2 =  deflated_newton_cond2(x0, x1, F)
-plot(cond_number, label=L"A_1", legend=:bottomright)
+p = plot(cond_number, label=L"A_1", legend=:bottomright)
 plot!(cond_number2, label=L"A_2")

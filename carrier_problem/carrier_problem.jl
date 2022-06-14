@@ -23,7 +23,7 @@ function M(x, x1, p=2, alpha=1)
     1 / norm(x - x1)^p + alpha
 end
 
-function newton(f, x0, max_iter=2000, eps=1e-8)
+function newton(f, x0, max_iter=1000, eps=1e-5)
     x = x0
     i = 0
     while norm(f(x)) > eps
@@ -34,7 +34,7 @@ function newton(f, x0, max_iter=2000, eps=1e-8)
         # Have to make A invertible while preserving the boundary conditions
         A[1, 1] = 1
         A[end, end] = 1
-        x = x - 0.5 * (qr(A) \ f(x))
+        x = x - 0.7 * (qr(A) \ f(x))
         i += 1
     end
     x
@@ -51,8 +51,7 @@ x4 = newton(g3, x0)
 g4 = x -> M(x, x4) * g3(x)
 x5 = newton(g4, x0)
 
-x4 - x3
 
-plot(x, x1)
-plot(x, x2)
-plot(x, x3)
+plot(x, x1, label="")
+plot(x, x2, label="")
+plot(x, x3, label="")
