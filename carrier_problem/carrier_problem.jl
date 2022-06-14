@@ -53,5 +53,6 @@ x5 = newton(g4, x0)
 
 
 plot(x, x1, label="")
-plot(x, x2, label="")
-plot(x, x3, label="")
+plot!(x, x2, label="")
+plot!(x, x3, label="")
+plot!(x, x4, lable="")
