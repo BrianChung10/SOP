@@ -29,8 +29,8 @@ x3 = -f(x2)/derivative(f, x2) + x2
 xrange3 = range(x2, x3, length=100)
 plot!(xrange3, f3.(xrange3), label="", color="orange")
 
-scatter!((x0, 0), label=L"x_0")
-scatter!((x1, 0), label=L"x_1", color="yellow")
-scatter!((x2, 0), label=L"x_2", color="red")
-scatter!((x3, 0), label=L"x_3")
+scatter!((x0, 0), label=L"x^{(0)}")
+scatter!((x1, 0), label=L"x^{(1)}", color="yellow")
+scatter!((x2, 0), label=L"x^{(2)}", color="red")
+scatter!((x3, 0), label=L"x^{(3)}")
 

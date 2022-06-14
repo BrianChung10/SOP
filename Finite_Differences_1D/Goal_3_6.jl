@@ -59,10 +59,10 @@ x0 = zeros(n+1)
 # Obtain the first solution using the Newton's method
 x1 = newton(F, x0)
 # Obtain the second solution using the deflation 
-g(x) = x -> M(x, x1) * F(x)
+g = x -> M(x, x1) * F(x)
 x2 = newton(g, x0)
 
-plot(x1, title="The solutions for the Bratu equation", label="The first solution")
+p = plot(x1, label="The first solution")
 plot!(x2, label="The second solution")
 
 # We obtain the solution of the ODE via (2.10)
@@ -127,7 +127,8 @@ lambda = 0.02: 0.01: 4
 
 line1 = [sol[i][1] for i = 1:length(sol)]
 line2 = [sol[i][2] for i = 1:length(sol)]
-plot(lambda, line1, title="Bifurcation diagram for the Bratu equation", label=L"||\mathbf{u}_1||")
-plot!(lambda, line2, label=L"||\mathbf{u}_2||")
+p = plot(lambda, line1, label=L"$\|\| \mathbf{u}_1\|\|$")
+plot!(lambda, line2, label=L"$\|\| \mathbf{u}_1\|\|$")
 lambda1 = (3.51383, 8.7)
 scatter!(lambda1, label=L"\lambda_{*}")
+vline!([lambda1[1]], label="")

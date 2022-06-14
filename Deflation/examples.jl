@@ -36,7 +36,7 @@ g(x, y) = 3x^2 + x - y
 f1(x) = 5x^3 - 4x
 g1(x) = 3x^2 + x
 
-plot(f1, -1.5, 1.5, label=L"5x^3-4x-y=0", title="The Cubic-Parabola Example")
+p = plot(f1, -1.5, 1.5, label=L"5x^3-4x-y=0")
 plot!(g1, -1.5, 1.5, label=L"3x^2+x-y=0")
 
 
@@ -101,7 +101,7 @@ plot_wireframe(xgrid,ygrid,z)
 
 # Figure 1.3
 f1(x) = sin(x)
-plot(f1, -1, 8, label=L"y=sin(x)")
+p = plot(f1, -1, 8, label=L"y=sin(x)")
 f2(x) = sin(x) / x
 plot!(f2, -1, 8, label=L"y=\frac{sin(x)}{x}")
 f2(x) = sin(x) / (x * (x-π))

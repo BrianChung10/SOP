@@ -60,7 +60,7 @@ x0[end] = sqrt(10)
 x1 = newton(F, x0)
 x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE
 
-plot(x1, title="Solutions for Painleve equation", legend=:bottomright, label=L"u_1")
+p = plot(x1, legend=:bottomright, label=L"u_1")
 plot!(x2, label=L"u_2")
 
 # We obtain the solution of the ODE via (2.10)
