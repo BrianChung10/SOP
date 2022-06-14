@@ -14,7 +14,7 @@ A = fd_2d(4)
 
 
 n = 100
-μ = 0.6 # Now make μ = 3ω
+μ = 0.8 # Now make μ = 4ω
 function F(u::AbstractVector{T}) where T # F takes a vector of lengh (n-1)^2 and returns a vector of length (n-1)^2
     ω = 0.2 # ω is fixed at 0.2
     A = fd_2d(n)
@@ -120,6 +120,9 @@ F6(x) = M(x, x6) * F5(x)
 x7 = newton_s(F6, x0)
 F7(x) = M(x, x7) * F6(x)
 x8 = newton_s(F7, x0)
+F8(x) = M(x, x8) * F7(x)
+x9 = newton_s(F8, x0)
+
 
 
 
@@ -151,6 +154,8 @@ x4_mat = reshape(x4, n-1, n-1)
 x5_mat = reshape(x5, n-1, n-1)
 x6_mat = reshape(x6, n-1, n-1)
 x7_mat = reshape(x7, n-1, n-1)
+x8_mat = reshape(x8, n-1, n-1)
+x9_mat = reshape(x9, n-1, n-1)
 
 
 xrange = [i for i = range(-12, 12, length=n+1)]
@@ -176,3 +181,9 @@ plot(data6)
 
 data7 = contour(x=xrange, y=yrange, z=x7_mat, contours_coloring="heatmap", line_width=0)
 plot(data7)
+
+data8 = contour(x=xrange, y=yrange, z=x8_mat, contours_coloring="heatmap", line_width=0)
+plot(data8)
+
+data9 = contour(x=xrange, y=yrange, z=x9_mat, contours_coloring="heatmap", line_width=0)
+plot(data9)
