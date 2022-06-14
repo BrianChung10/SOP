@@ -101,8 +101,9 @@ plot_wireframe(xgrid,ygrid,z)
 
 # Figure 1.3
 f1(x) = sin(x)
-p = plot(f1, -1, 8, label=L"y=sin(x)")
+p = plot(f1, -1, 8, label=L"y=\sin(x)")
 f2(x) = sin(x) / x
-plot!(f2, -1, 8, label=L"y=\frac{sin(x)}{x}")
+plot!(f2, -1, 8, label=L"y=\frac{\sin(x)}{x}")
 f2(x) = sin(x) / (x * (x-π))
-plot!(f2, -1, 8, label=L"y=\frac{sin(x)}{x(x-\pi)}")
+plot!(f2, -1, 8, label=L"y=\frac{\sin(x)}{x(x-\pi)}")
+hline!([0], label="", color="black")
