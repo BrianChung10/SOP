@@ -4,7 +4,7 @@ import LinearAlgebra: norm, inv
 import SparseArrays: sparse
 
 n = 100
-function U(n) # Function that produces the matrix satisfies the boundary condition
+function make_U(n) # Function that produces the matrix satisfies the boundary condition
     xrange = range(0, 1, length=n+1)
     yrange = range(0, 1, length=n+1)
     h = step(xrange)
@@ -23,7 +23,7 @@ function U(n) # Function that produces the matrix satisfies the boundary conditi
 A
 end
 
-A = U(10)
+A = make_U(10)
 
 
 
@@ -32,7 +32,7 @@ A = U(10)
 function F(u::AbstractVector{T}) where T
     # F takes a vector of length (n+1)^2 and returns a vector of (n+1)^2
     U = reshape(u, (n+1, n+1))'
-    v = zeros(n+1, n+1)
+    v = make_U(n)
 
     xrange = range(0, 1, length=n+1)
     yrange = range(0, 1, length=n+1)
@@ -62,9 +62,5 @@ function newton(f, x0, max_iter=1000, eps=1e-8)
     x
 end
 
-
-u = U(n)
-x0 = vec(U(n)')
-x0 = convert(Vector{Float64}, x0)
 
 x1 = newton(F, x0)
