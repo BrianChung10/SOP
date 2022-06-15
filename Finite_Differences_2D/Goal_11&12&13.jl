@@ -10,11 +10,9 @@ function fd_2d(n)
     kron(sparse(A), sparse(I(n))) + kron(sparse(I(n)), sparse(A))
 end
 
-A = fd_2d(4)
-
 
 n = 100
-μ = 0.8 # Now make μ = 4ω
+μ = 1.2 # Now make μ = 6ω
 function F(u::AbstractVector{T}) where T # F takes a vector of lengh (n-1)^2 and returns a vector of length (n-1)^2
     ω = 0.2 # ω is fixed at 0.2
     A = fd_2d(n)
@@ -60,11 +58,6 @@ function jacobian_s(u) # u is a (n-1) * (n-1) vector
     v += 3 * u .^ 2
     (1/2) * (1/h^2) * fd_2d(n) + Diagonal(v)
 end
-
-x0 = zeros((n-1)^2)
-A = jacobian_s(x0)
-B = jacobian(F, x0)
-A - B
 
 
 function newton(f, x0, max_iter=1000, eps=1e-5)
@@ -122,8 +115,10 @@ F7(x) = M(x, x7) * F6(x)
 x8 = newton_s(F7, x0)
 F8(x) = M(x, x8) * F7(x)
 x9 = newton_s(F8, x0)
-
-
+F9(x) = M(x, x9) * F8(x)
+x10 = newton_s(F9, x0)
+F10(x) = M(x, x9) * F9(x)
+x11 = newton_s(F10, x0)
 
 
 
@@ -156,6 +151,8 @@ x6_mat = reshape(x6, n-1, n-1)
 x7_mat = reshape(x7, n-1, n-1)
 x8_mat = reshape(x8, n-1, n-1)
 x9_mat = reshape(x9, n-1, n-1)
+x10_mat = reshape(x10, n-1, n-1)
+x11_mat = reshape(x11, n-1, n-1)
 
 
 xrange = [i for i = range(-12, 12, length=n+1)]
@@ -187,3 +184,9 @@ plot(data8)
 
 data9 = contour(x=xrange, y=yrange, z=x9_mat, contours_coloring="heatmap", line_width=0)
 plot(data9)
+
+data10 = contour(x=xrange, y=yrange, z=x10_mat, contours_coloring="heatmap", line_width=0)
+plot(data9)
+
+data11 = contour(x=xrange, y=yrange, z=x11_mat, contours_coloring="heatmap", line_width=0)
+plot(data11)
