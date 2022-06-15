@@ -52,7 +52,7 @@ g4 = x -> M(x, x4) * g3(x)
 x5 = newton(g4, x0)
 
 
-plot(x, x1, label="")
-plot(x, x2, label="")
-plot(x, x3, label="")
+p = plot(x, x1, label="")
+p = plot(x, x2, label="")
+p = plot(x, x3, label="")
 plot(x, x4, lable="")
