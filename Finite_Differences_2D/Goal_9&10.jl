@@ -105,4 +105,4 @@ error = error_approx(200)
 error1 = float.(error)
 n = 10: 200
 
-plot(n, error1, title="Difference between numerical and actual solution", label="Error")
+p = plot(n, error1, label="Error")
