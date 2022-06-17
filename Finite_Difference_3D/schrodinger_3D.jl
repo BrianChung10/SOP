@@ -2,6 +2,11 @@ using PlotlyJS, LinearAlgebra, SparseArrays
 import ForwardDiff: derivative, jacobian, gradient
 import LinearAlgebra: norm, inv
 import SparseArrays: sparse
+import Pkg
+Pkg.add("WriteVTK")
+Pkg.add("")
+
+
 
 
 function fd_3d(n)
@@ -14,7 +19,7 @@ fd_3d(3)
 
 
 
-n = 10
+n = 20
 μ = 0.4 # Now make μ = 2ω
 function F(u::AbstractVector{T}) where T # F takes a vector of lengh (n-1)^2 and returns a vector of length (n-1)^2
     ω = 0.2 # ω is fixed at 0.2
@@ -108,17 +113,18 @@ x11 = newton_s(F10, x0)
 
 
 x1_mat = reshape(x1, n-1, n-1, n-1)
-x2_mat = reshape(x2, n-1, n-1)
-x3_mat = reshape(x3, n-1, n-1)
-x4_mat = reshape(x4, n-1, n-1)
-x5_mat = reshape(x5, n-1, n-1)
+x2_mat = reshape(x2, n-1, n-1, n-1)
+x3_mat = reshape(x3, n-1, n-1, n-1)
+x4_mat = reshape(x4, n-1, n-1, n-1)
+x5_mat = reshape(x5, n-1, n-1, n-1)
 
-z_data = x1_mat
-layout = Layout(
-    title="Mt Bruno Elevation",
-    autosize=false,
-    width=500,
-    height=500,
-    margin=attr(l=65, r=50, b=65, t=90)
-)
-plot(surface(z=z_data), layout)
+
+
+xrange = [i for i = range(-12, 12, length=n+1)]
+yrange = [i for i = range(-12, 12, length=n+1)]
+
+data1 = contour(x=xrange, y=yrange, z=x1_mat[:, :, 1], contours_coloring="heatmap", line_width=0)
+plot(data1)
+
+data2 = contour(x=xrange, y=yrange, z=x1_mat[:, :, 2], contours_coloring="heatmap", line_width=0)
+plot(data2)
