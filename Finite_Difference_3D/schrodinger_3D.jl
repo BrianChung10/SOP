@@ -20,7 +20,7 @@ fd_3d(3)
 
 
 n = 20
-μ = 0.4 # Now make μ = 2ω
+μ = 1 # Now make μ = 6ω
 function F(u::AbstractVector{T}) where T # F takes a vector of lengh (n-1)^2 and returns a vector of length (n-1)^2
     ω = 0.2 # ω is fixed at 0.2
     A = fd_3d(n)
@@ -123,8 +123,8 @@ x5_mat = reshape(x5, n-1, n-1, n-1)
 xrange = [i for i = range(-12, 12, length=n+1)]
 yrange = [i for i = range(-12, 12, length=n+1)]
 
-data1 = contour(x=xrange, y=yrange, z=x1_mat[:, :, 1], contours_coloring="heatmap", line_width=0)
+data1 = contour(x=xrange, y=yrange, z=x1_mat[:, :, 19], contours_coloring="heatmap", line_width=0)
 plot(data1)
 
-data2 = contour(x=xrange, y=yrange, z=x1_mat[:, :, 2], contours_coloring="heatmap", line_width=0)
+data2 = contour(x=xrange, y=yrange, z=x2_mat[:, :, 18], contours_coloring="heatmap", line_width=0)
 plot(data2)

@@ -62,8 +62,9 @@ x1 = newton(F, x0)
 g = x -> M(x, x1) * F(x)
 x2 = newton(g, x0)
 
-p = plot(x1, label="The first solution")
-plot!(x2, label="The second solution")
+xrange = range(0, 1, length=101)
+p = plot(xrange, x1, label=L"u_1")
+plot!(xrange, x2, label=L"u_2")
 
 # We obtain the solution of the ODE via (2.10)
 function deflated_newton_2(x0, x1, f, max_iter=5000, epsilon=1e-10)
@@ -122,12 +123,14 @@ function solutions()
     solution
 end
 
+
 sol = solutions()
 lambda = 0.02: 0.01: 4
 
+
 line1 = [sol[i][1] for i = 1:length(sol)]
 line2 = [sol[i][2] for i = 1:length(sol)]
-p = plot(lambda, line1, label=L"$\|\| \mathbf{u}_1\|\|$")
+p = plot(lambda, line1, label=L"$\|\| \mathbf{u}_1\|\|$", xlabel=L"\lambda", ylabel=L"\|\|u\|\|")
 plot!(lambda, line2, label=L"$\|\| \mathbf{u}_1\|\|$")
 lambda1 = (3.51383, 8.7)
 scatter!(lambda1, label=L"\lambda_{*}")
