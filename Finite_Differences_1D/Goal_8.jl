@@ -43,6 +43,7 @@ function newton(f, x0, max_iter=1000, eps=1e-4)
         A[1, 1] = 1
         A[end, end] = 1
         x = x - (qr(A) \ f(x)) # damped
+        println(x)
         i += 1
     end
     x

@@ -3,11 +3,11 @@ import ForwardDiff: derivative, jacobian, gradient
 import LinearAlgebra: norm, inv
 import SparseArrays: sparse
 
-# function that computes the finite difference in 2D
+# function that returns the finite difference matrix in 2D
 function fd_2d(n)
     n -= 1
-    A = Tridiagonal(fill(-1, n-1), fill(2, n), fill(-1, n-1))
-    kron(sparse(A), sparse(I(n))) + kron(sparse(I(n)), sparse(A))
+    F = Tridiagonal(fill(-1, n-1), fill(2, n), fill(-1, n-1)) # 1D finite-difference matrix
+    kron(sparse(F), sparse(I(n))) + kron(sparse(I(n)), sparse(F)) # returns a sparse matrix
 end
 
 
@@ -39,7 +39,7 @@ function M(x, x1, p=2, alpha=1) # Modified deflation operator
 end
 
 
-function jacobian_s(u) # u is a (n-1) * (n-1) vector
+function jacobian_residual(u) # u is a (n-1)^2 vector
     ω = 0.2
     v = zeros((n-1)^2)
 
