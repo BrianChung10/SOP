@@ -34,6 +34,7 @@ end
 function newton(f, x0, max_iter=1000, eps=1e-4)
     x = x0
     i = 0
+    sol = []
     while norm(f(x)) > eps
         if i > max_iter
             return "Cannot converge."
@@ -43,11 +44,13 @@ function newton(f, x0, max_iter=1000, eps=1e-4)
         A[1, 1] = 1
         A[end, end] = 1
         x = x - (qr(A) \ f(x)) # damped
-        println(x)
+        push!(sol, x)
         i += 1
     end
-    x
+    sol
 end
+
+plot(sol)
 
 function deflated_newton(x0, x1, f)
     g = x -> M(x, x1) * f(x)
@@ -55,9 +58,14 @@ function deflated_newton(x0, x1, f)
 end
 
 
+
 # We obtain the solution of the ODE via (2.6)
 x0 = zeros(n+1)
 x0[end] = sqrt(10)
+
+sol = newton(F, x0)
+plot(sol)
+
 x1 = newton(F, x0)
 x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE
 
