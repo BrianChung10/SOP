@@ -50,7 +50,7 @@ function newton(f, x0, max_iter=1000, eps=1e-4)
     sol
 end
 
-plot(sol)
+
 
 function deflated_newton(x0, x1, f)
     g = x -> M(x, x1) * f(x)
@@ -64,7 +64,7 @@ x0 = zeros(n+1)
 x0[end] = sqrt(10)
 
 sol = newton(F, x0)
-plot(sol)
+plot(sol, label="")
 
 x1 = newton(F, x0)
 x2 = deflated_newton(x0, x1, F) # Two solutions for the ODE
