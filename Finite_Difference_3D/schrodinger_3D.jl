@@ -2,24 +2,21 @@ using PlotlyJS, LinearAlgebra, SparseArrays
 import ForwardDiff: derivative, jacobian, gradient
 import LinearAlgebra: norm, inv
 import SparseArrays: sparse
-import Pkg
-Pkg.add("WriteVTK")
-Pkg.add("")
-
 
 
 
 function fd_3d(n)
     n -= 1
     A = Tridiagonal(fill(-1, n-1), fill(2, n), fill(-1, n-1))
-    kron(sparse(A), kron(sparse(I(n)), sparse(I(n)))) + kron(kron(sparse(I(n)), sparse(A)), sparse(I(n))) + kron(sparse(I(n)), sparse(I(n)), sparse(A))
+    (kron(sparse(A), kron(sparse(I(n)), sparse(I(n)))) + kron(kron(sparse(I(n)), sparse(A)), sparse(I(n))) 
+    + kron(sparse(I(n)), sparse(I(n)), sparse(A)))
 end
 
 fd_3d(3)
 
 
 
-n = 20
+n = 25
 μ = 1 # Now make μ = 6ω
 function F(u::AbstractVector{T}) where T # F takes a vector of lengh (n-1)^2 and returns a vector of length (n-1)^2
     ω = 0.2 # ω is fixed at 0.2
@@ -123,7 +120,7 @@ x5_mat = reshape(x5, n-1, n-1, n-1)
 xrange = [i for i = range(-12, 12, length=n+1)]
 yrange = [i for i = range(-12, 12, length=n+1)]
 
-data1 = contour(x=xrange, y=yrange, z=x1_mat[:, :, 19], contours_coloring="heatmap", line_width=0)
+data1 = contour(x=xrange, y=yrange, z=x1_mat[:, :, 16], contours_coloring="heatmap", line_width=0)
 plot(data1)
 
 data2 = contour(x=xrange, y=yrange, z=x2_mat[:, :, 18], contours_coloring="heatmap", line_width=0)

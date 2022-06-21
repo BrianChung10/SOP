@@ -75,14 +75,14 @@ function newton(f, x0, max_iter=1000, eps=1e-5)
                 end
             end
         end
-        x = x - 0.1 * (qr(A) \ f(x))
+        x = x - (qr(A) \ f(x))
         i += 1
     end
     x
 end
 
 U = make_U(n)
-U[2:end-1, 2:end-1] .= 0.1
+U[2:end-1, 2:end-1] .= 0
 x0 = vec(U') # Initial guess that satisfies the boundary condition
 
 x1 = newton(F, x0)
@@ -102,10 +102,10 @@ x3_mat = reshape(x3, n+1, n+1)
 xrange = [i for i = range(0, 1, length=n+1)]
 yrange = [i for i = range(0, 1, length=n+1)]
 
-data1 = contour(x=xrange, y=yrange, z=x1_mat, contours_coloring="heatmap", line_width=0)
+data1 = contour(x=xrange, y=yrange, z=-x1_mat, contours_coloring="heatmap", line_width=0)
 plot(data1)
 
-data2 = contour(x=xrange, y=yrange, z=x2_mat, contours_coloring="heatmap", line_width=0)
+data2 = contour(x=xrange, y=yrange, z=-x2_mat, contours_coloring="heatmap", line_width=0)
 plot(data2)
 
 data3 = contour(x=xrange, y=yrange, z=x3_mat, contours_coloring="heatmap", line_width=0)
